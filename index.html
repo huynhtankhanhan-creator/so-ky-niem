@@ -1,0 +1,3058 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Sổ Kỷ Niệm A12</title>
+    <!-- PWA: cài lên màn hình chính, mở như app -->
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#ff8a6b">
+    <link rel="icon" type="image/png" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="A12">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <!-- Thông tin máy chủ Firebase (bạn tự điền) -->
+    <script src="firebase-config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Lora:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #fdf8f0;
+            --card-color: #ffffff;
+            --text-primary: #2d241e;
+            --text-secondary: #6e5d52;
+            --accent-color: #d97706;
+            --accent-soft: #fef3c7;
+            --border-color: #ebd9c3;
+        }
+
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            transition: background-color 0.35s ease, color 0.35s ease;
+            overflow-x: hidden;
+        }
+
+        .font-classic { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-classic .heading-font { font-family: 'Lora', serif; }
+
+        .font-handwriting { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-handwriting .heading-font,
+        .font-handwriting .story-font { font-family: 'Caveat', cursive; font-size: 1.25em; }
+
+        .font-modern { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-modern .heading-font { font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+
+        .bg-theme-card { background-color: var(--card-color); border-color: var(--border-color); }
+        .text-theme-primary { color: var(--text-primary); }
+        .text-theme-secondary { color: var(--text-secondary); }
+        .bg-theme-accent { background-color: var(--accent-color); }
+        .text-theme-accent { color: var(--accent-color); }
+        .bg-theme-accent-soft { background-color: var(--accent-soft); }
+
+        .card-polaroid {
+            padding: 14px 14px 22px 14px;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card-polaroid:hover {
+            transform: translateY(-6px) rotate(0.6deg);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.14);
+        }
+
+        .card-modern {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card-modern:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 28px -6px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-scrapbook {
+            position: relative;
+            padding: 16px;
+            border-radius: 12px;
+            border-style: dashed;
+            border-width: 2px;
+            box-shadow: 4px 6px 0px var(--border-color);
+            transition: transform 0.25s ease;
+        }
+        .card-scrapbook::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            width: 76px;
+            height: 22px;
+            background-color: var(--accent-soft);
+            opacity: 0.85;
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
+            z-index: 5;
+        }
+        .card-scrapbook:hover {
+            transform: translateY(-4px);
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.35); border-radius: 99px; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeUp 0.4s ease forwards; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .animate-shake { animation: shake 0.35s ease-in-out; }
+
+        @keyframes bounceDot {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        .typing-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+            animation: bounceDot 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        .ai-chip {
+            padding: 4px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+        }
+        .ai-chip:hover { background-color: var(--accent-soft); }
+
+        .mic-listening { background-color: #e11d48 !important; color: #fff; animation: pulseMic 1.2s infinite; }
+        @keyframes pulseMic {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(225, 29, 72, 0); }
+        }
+    </style>
+</head>
+<body class="font-classic antialiased selection:bg-amber-500/20">
+
+    <!-- Thanh điều hướng trên cùng -->
+    <nav class="sticky top-0 z-30 backdrop-blur-md border-b transition-colors duration-300" style="background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); border-color: var(--border-color);">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <img src="icons/icon-192.png" alt="Logo A12" class="w-9 h-9 rounded-xl shadow-sm">
+                <span class="font-bold text-base sm:text-lg tracking-tight hidden sm:inline">Sổ Kỷ Niệm A12</span>
+            </div>
+
+            <div class="flex items-center gap-1.5 sm:gap-2.5">
+                <!-- Nút Trạng Thái Khóa / Mở Khóa Quyền Chỉnh Sửa -->
+                <button id="lockStatusBtn" onclick="handleLockButtonClick()" class="px-3 py-2 rounded-xl border transition flex items-center gap-1.5 text-xs sm:text-sm font-semibold shadow-sm" title="Đăng nhập / đăng xuất tài khoản chủ sổ">
+                    <span id="lockStatusIcon">🔒</span>
+                    <span id="lockStatusText" class="hidden md:inline">Khóa chỉnh sửa</span>
+                </button>
+
+                <!-- Nút Tùy chỉnh Giao diện (Chỉ hiện khi đã mở khóa) -->
+                <button id="btnOpenTheme" onclick="openThemeDrawer()" class="edit-only hidden px-3 py-2 rounded-xl bg-theme-card border hover:opacity-90 transition flex items-center gap-1.5 text-xs sm:text-sm font-medium shadow-sm" title="Tùy chỉnh màu sắc, phông chữ, khung thẻ">
+                    <span>🎨</span>
+                    <span class="hidden sm:inline">Giao diện</span>
+                </button>
+
+                <!-- Nút Sao lưu / Khôi phục -->
+                <button onclick="openBackupModal()" class="px-3 py-2 rounded-xl bg-theme-card border hover:opacity-90 transition flex items-center gap-1.5 text-xs sm:text-sm font-medium shadow-sm" title="Xuất hoặc Nhập dữ liệu kỷ niệm">
+                    <span>💾</span>
+                    <span class="hidden sm:inline">Sao lưu</span>
+                </button>
+
+                <!-- Nút Tạo Nhiều Kỷ Niệm (Chỉ hiện khi có quyền sửa) -->
+                <button onclick="openBulkModal()" class="edit-only hidden px-3 py-2 rounded-xl bg-theme-card border hover:opacity-90 transition flex items-center gap-1.5 text-xs sm:text-sm font-medium shadow-sm" title="Dán danh sách tên để tạo nhiều kỷ niệm cùng lúc">
+                    <span>👥</span>
+                    <span class="hidden sm:inline">Tạo nhiều</span>
+                </button>
+
+                <!-- Nút Thêm Kỷ Niệm Mới (Chỉ hiện khi đã mở khóa) -->
+                <button id="btnAddMemoryNav" onclick="openMemoryModal()" class="edit-only hidden px-3.5 sm:px-4 py-2 rounded-xl bg-theme-accent text-white font-semibold text-xs sm:text-sm shadow-md hover:brightness-110 active:scale-95 transition flex items-center gap-1.5">
+                    <span class="text-base leading-none">+</span>
+                    <span>Thêm kỷ niệm</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Thanh nhắc sao lưu (ẩn sẵn, chỉ hiện khi đến lúc cần sao lưu) -->
+    <div id="backupReminderBar" class="hidden max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-2xl border bg-amber-500/10 border-amber-500/30 text-sm">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">⏰</span>
+                <span id="backupReminderText">Bạn chưa sao lưu dữ liệu.</span>
+            </div>
+            <div class="flex gap-2 shrink-0">
+                <button onclick="snoozeBackupReminder()" class="px-3 py-1.5 rounded-xl border text-xs font-medium hover:bg-black/5" style="border-color: var(--border-color);">Để mai</button>
+                <button onclick="exportDataJSON()" class="px-3 py-1.5 rounded-xl bg-theme-accent text-white text-xs font-semibold hover:brightness-110">💾 Sao lưu ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phần Đầu Trang Kỷ Niệm -->
+    <header class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-4">
+        <div class="relative rounded-3xl overflow-hidden bg-theme-card border shadow-lg transition-all duration-300">
+            <div class="relative h-48 sm:h-64 md:h-72 w-full bg-slate-200 overflow-hidden group">
+                <img id="pageCoverImg" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80" 
+                     onerror="this.onerror=null;this.src='icons/placeholder.svg'"
+                     alt="Ảnh bìa kỷ niệm" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                
+                <!-- Nút chỉnh sửa thông tin trang (Chỉ hiện khi đã mở khóa) -->
+                <button onclick="openHeaderEditModal()" class="edit-only hidden absolute top-4 right-4 px-3.5 py-2 rounded-xl bg-black/50 hover:bg-black/75 text-white backdrop-blur-md text-xs sm:text-sm font-medium flex items-center gap-1.5 transition border border-white/20 shadow-md">
+                    <span>✏️</span>
+                    <span>Sửa thông tin trang</span>
+                </button>
+            </div>
+
+            <div class="relative px-6 pb-6 pt-12 sm:pt-4 sm:pl-40 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div class="absolute -top-12 left-6 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 overflow-hidden shadow-xl bg-white" style="border-color: var(--card-color);">
+                    <img id="pageAvatarImg" src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
+                         onerror="this.onerror=null;this.src='icons/icon-192.png'"
+                         alt="Avatar nhóm" class="w-full h-full object-cover">
+                </div>
+
+                <div class="space-y-1">
+                    <h1 id="pageTitleDisplay" class="heading-font text-2xl sm:text-3xl md:text-4xl font-bold">
+                        Thanh Xuân & Những Người Bạn ✨
+                    </h1>
+                    <p id="pageSubtitleDisplay" class="text-theme-secondary text-sm sm:text-base max-w-2xl">
+                        Nơi lưu giữ những khoảnh khắc rực rỡ, những chuyến đi và nụ cười của chúng ta theo năm tháng.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-3 shrink-0 pt-2 sm:pt-0">
+                    <div class="px-3.5 py-2 rounded-2xl bg-theme-accent-soft text-theme-accent text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                        <span>📸</span>
+                        <span id="statMemoriesCount">0 kỷ niệm</span>
+                    </div>
+                    <div class="px-3.5 py-2 rounded-2xl bg-theme-accent-soft text-theme-accent text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                        <span>👥</span>
+                        <span id="statFriendsCount">0 người bạn</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Thanh Tìm Kiếm & Bộ Lọc Theo Tên Bạn Bè -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 py-4 space-y-4">
+        <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+            <div class="relative flex-1 max-w-md">
+                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-theme-secondary">🔍</span>
+                <input type="text" id="searchInput" oninput="renderMemories()" 
+                       placeholder="Tìm theo tên bạn bè, địa điểm hoặc lời nhắn..." 
+                       class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-theme-card border text-sm focus:outline-none focus:ring-2 transition"
+                       style="--tw-ring-color: var(--accent-color);">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <label for="sortSelect" class="text-xs font-medium text-theme-secondary whitespace-nowrap">Sắp xếp:</label>
+                <select id="sortSelect" onchange="renderMemories()" class="px-3 py-2.5 rounded-2xl bg-theme-card border text-xs sm:text-sm font-medium focus:outline-none">
+                    <option value="newest">Mới nhất trước</option>
+                    <option value="oldest">Cũ nhất trước</option>
+                    <option value="name">Tên bạn bè (A-Z)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="friendFilterPills" class="flex items-center gap-2 overflow-x-auto pb-1"></div>
+    </section>
+
+    <!-- Lưới Hiển Thị Các Thẻ Kỷ Niệm -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
+        <div id="memoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"></div>
+
+        <!-- Trạng thái trống -->
+        <div id="emptyState" class="hidden text-center py-16 px-4 bg-theme-card border rounded-3xl mt-4">
+            <div class="text-5xl mb-3">📷</div>
+            <h3 id="emptyStateTitle" class="heading-font text-xl font-bold mb-1">Chưa tìm thấy kỷ niệm nào</h3>
+            <p class="text-theme-secondary text-sm max-w-md mx-auto mb-5">
+                <span id="emptyStateText">Đang mở sổ kỷ niệm…</span>
+            </p>
+            <button id="emptyStateBtn" onclick="requestUnlockOrAction(() => openMemoryModal())" class="hidden px-5 py-2.5 rounded-xl bg-theme-accent text-white font-semibold text-sm shadow hover:brightness-110 transition">
+                + Tạo kỷ niệm ngay
+            </button>
+        </div>
+    </main>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 1: THÊM / CHỈNH SỬA KỶ NIỆM & BẠN BÈ                            -->
+    <!-- ===================================================================== -->
+    <div id="memoryModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-lg p-6 shadow-2xl my-8 animate-fade-up">
+            <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+                <h2 id="memoryModalTitle" class="heading-font text-xl font-bold">Thêm Kỷ Niệm Mới ✨</h2>
+                <button onclick="closeMemoryModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 transition">✕</button>
+            </div>
+
+            <form id="memoryForm" onsubmit="handleSaveMemory(event)" class="space-y-4 mt-4">
+                <input type="hidden" id="memoryId">
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Tên người bạn / Nhóm bạn *</label>
+                    <input type="text" id="friendNameInput" list="existingFriendsList" required placeholder="VD: Minh Anh, Hoàng Nam, Hội Bạn Thân..."
+                           class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                           style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                    <datalist id="existingFriendsList"></datalist>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Tiêu đề kỷ niệm *</label>
+                    <input type="text" id="memoryTitleInput" required placeholder="VD: Chuyến đi Đà Lạt đầu tiên cùng nhau"
+                           class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                           style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Ngày kỷ niệm</label>
+                        <input type="date" id="memoryDateInput"
+                               class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                               style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Địa điểm</label>
+                        <input type="text" id="memoryLocationInput" placeholder="VD: Quán cafe góc phố..."
+                               class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                               style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex items-center justify-between mb-1.5">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary">Hình ảnh kỷ niệm</label>
+                        <div class="flex gap-1 text-xs">
+                            <button type="button" id="tabUploadFile" onclick="switchImageInputMode('upload')" class="px-2.5 py-1 rounded-lg bg-theme-accent text-white font-medium">Tải ảnh lên</button>
+                            <button type="button" id="tabImageUrl" onclick="switchImageInputMode('url')" class="px-2.5 py-1 rounded-lg border font-medium">Dán Link URL</button>
+                        </div>
+                    </div>
+
+                    <div id="uploadFileArea" class="relative border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer hover:bg-black/5 transition" style="border-color: var(--border-color);" onclick="document.getElementById('imageFileInput').click()">
+                        <input type="file" id="imageFileInput" accept="image/*" class="hidden" onchange="handleImageFileUpload(event)">
+                        <div class="text-2xl mb-1">🖼️</div>
+                        <p class="text-xs font-medium">Bấm để chọn ảnh từ điện thoại hoặc máy tính</p>
+                        <p class="text-[11px] text-theme-secondary mt-0.5">Tự động tối ưu dung lượng để lưu trữ mượt mà</p>
+                    </div>
+
+                    <div id="urlInputArea" class="hidden">
+                        <input type="url" id="imageUrlInput" oninput="handleImageUrlPreview(this.value)" placeholder="https://example.com/anh-ky-niem.jpg"
+                               class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none"
+                               style="border-color: var(--border-color);">
+                    </div>
+
+                    <div id="imagePreviewBox" class="hidden mt-3 relative rounded-2xl overflow-hidden border h-44 bg-black/5" style="border-color: var(--border-color);">
+                        <img id="imagePreviewImg" src="" alt="Xem trước ảnh" class="w-full h-full object-cover">
+                        <button type="button" onclick="clearSelectedImage()" class="absolute top-2 right-2 px-2.5 py-1 rounded-lg bg-black/65 text-white text-xs hover:bg-rose-600 transition">
+                            Xóa ảnh
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Lời nhắn / Câu chuyện kỷ niệm *</label>
+                    <textarea id="memoryStoryInput" rows="3" required placeholder="Viết vài dòng nhắn gửi hoặc kể lại kỷ niệm đáng nhớ này..."
+                              class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                              style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);"></textarea>
+                </div>
+
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t" style="border-color: var(--border-color);">
+                    <button type="button" onclick="closeMemoryModal()" class="px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-black/5 transition" style="border-color: var(--border-color);">
+                        Hủy
+                    </button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-theme-accent text-white text-sm font-semibold shadow-md hover:brightness-110 transition">
+                        Lưu kỷ niệm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 2: CHỈNH SỬA TIÊU ĐỀ, ẢNH BÌA & AVATAR TRANG CHỦ                -->
+    <!-- ===================================================================== -->
+    <div id="headerEditModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-lg p-6 shadow-2xl my-8 animate-fade-up">
+            <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+                <h2 class="heading-font text-xl font-bold">Chỉnh Sửa Thông Tin Trang ✏️</h2>
+                <button onclick="closeHeaderEditModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10">✕</button>
+            </div>
+
+            <form onsubmit="handleSaveHeader(event)" class="space-y-4 mt-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Tên trang kỷ niệm</label>
+                    <input type="text" id="editPageTitle" required class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm" style="border-color: var(--border-color);">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Lời đề tựa / Mô tả ngắn</label>
+                    <textarea id="editPageSubtitle" rows="2" class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm" style="border-color: var(--border-color);"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Ảnh bìa trang (Tải file hoặc dán link)</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="editCoverUrl" placeholder="Link ảnh bìa..." class="flex-1 px-3 py-2 rounded-xl border bg-transparent text-xs" style="border-color: var(--border-color);">
+                        <label class="px-3.5 py-2 rounded-xl bg-theme-accent-soft text-theme-accent text-xs font-bold cursor-pointer hover:opacity-85 flex items-center shrink-0">
+                            📁 Chọn ảnh
+                            <input type="file" accept="image/*" class="hidden" onchange="handleHeaderFileUpload(event, 'cover')">
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Ảnh đại diện nhóm / Avatar</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="editAvatarUrl" placeholder="Link ảnh đại diện..." class="flex-1 px-3 py-2 rounded-xl border bg-transparent text-xs" style="border-color: var(--border-color);">
+                        <label class="px-3.5 py-2 rounded-xl bg-theme-accent-soft text-theme-accent text-xs font-bold cursor-pointer hover:opacity-85 flex items-center shrink-0">
+                            📁 Chọn ảnh
+                            <input type="file" accept="image/*" class="hidden" onchange="handleHeaderFileUpload(event, 'avatar')">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-2.5 pt-3 border-t" style="border-color: var(--border-color);">
+                    <button type="button" onclick="closeHeaderEditModal()" class="px-4 py-2 rounded-xl border text-sm font-medium" style="border-color: var(--border-color);">Hủy</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-theme-accent text-white text-sm font-semibold shadow">Cập nhật</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 3: BẢNG TÙY CHỈNH GIAO DIỆN (THEME CUSTOMIZER DRAWER)           -->
+    <!-- ===================================================================== -->
+    <div id="themeDrawer" class="fixed inset-0 z-50 hidden justify-end bg-black/50 backdrop-blur-sm">
+        <div class="bg-theme-card border-l w-full max-w-sm h-full p-6 overflow-y-auto shadow-2xl flex flex-col justify-between">
+            <div class="space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+                    <h2 class="heading-font text-xl font-bold flex items-center gap-2">
+                        <span>🎨</span> Tùy Chỉnh Giao Diện
+                    </h2>
+                    <button onclick="closeThemeDrawer()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10">✕</button>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-3">1. Bộ giao diện có sẵn</label>
+                    <div class="grid grid-cols-1 gap-2.5">
+                        <button onclick="applyPresetTheme('vintage')" class="p-3 rounded-2xl border text-left flex items-center justify-between hover:scale-[1.01] transition" style="background:#fdf8f0; color:#2d241e; border-color:#ebd9c3;">
+                            <div>
+                                <div class="font-bold text-sm">📜 Sổ Tay Vintage</div>
+                                <div class="text-xs opacity-75">Giấy kem ấm áp, hoài niệm</div>
+                            </div>
+                            <span class="w-6 h-6 rounded-full" style="background:#d97706;"></span>
+                        </button>
+
+                        <button onclick="applyPresetTheme('pastel')" class="p-3 rounded-2xl border text-left flex items-center justify-between hover:scale-[1.01] transition" style="background:#fff5f7; color:#4a2532; border-color:#fbcfe8;">
+                            <div>
+                                <div class="font-bold text-sm">🌸 Pastel Mộng Mơ</div>
+                                <div class="text-xs opacity-75">Hồng phấn ngọt ngào, dễ thương</div>
+                            </div>
+                            <span class="w-6 h-6 rounded-full" style="background:#e11d48;"></span>
+                        </button>
+
+                        <button onclick="applyPresetTheme('midnight')" class="p-3 rounded-2xl border text-left flex items-center justify-between hover:scale-[1.01] transition" style="background:#0f172a; color:#f8fafc; border-color:#334155;">
+                            <div>
+                                <div class="font-bold text-sm">🌌 Trời Đêm Lấp Lánh</div>
+                                <div class="text-xs opacity-75">Chế độ tối sang trọng, dịu mắt</div>
+                            </div>
+                            <span class="w-6 h-6 rounded-full" style="background:#38bdf8;"></span>
+                        </button>
+
+                        <button onclick="applyPresetTheme('mint')" class="p-3 rounded-2xl border text-left flex items-center justify-between hover:scale-[1.01] transition" style="background:#f0fdf4; color:#143322; border-color:#bbf7d0;">
+                            <div>
+                                <div class="font-bold text-sm">🌿 Xanh Mint Tươi Mát</div>
+                                <div class="text-xs opacity-75">Nhẹ nhàng, tự nhiên như cỏ cây</div>
+                            </div>
+                            <span class="w-6 h-6 rounded-full" style="background:#059669;"></span>
+                        </button>
+
+                        <button onclick="applyPresetTheme('sunset')" class="p-3 rounded-2xl border text-left flex items-center justify-between hover:scale-[1.01] transition" style="background:#fff7ed; color:#431407; border-color:#fed7aa;">
+                            <div>
+                                <div class="font-bold text-sm">🌅 Hoàng Hôn Rực Rỡ</div>
+                                <div class="text-xs opacity-75">Cam đào năng động, tràn sức sống</div>
+                            </div>
+                            <span class="w-6 h-6 rounded-full" style="background:#ea580c;"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-2">2. Tự chọn bảng màu riêng</label>
+                    <div class="grid grid-cols-3 gap-2 text-xs">
+                        <div class="p-2 rounded-xl border text-center" style="border-color: var(--border-color);">
+                            <input type="color" id="customBgPicker" onchange="updateCustomColor('bg', this.value)" class="w-full h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <span class="block mt-1 font-medium">Màu nền</span>
+                        </div>
+                        <div class="p-2 rounded-xl border text-center" style="border-color: var(--border-color);">
+                            <input type="color" id="customCardPicker" onchange="updateCustomColor('card', this.value)" class="w-full h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <span class="block mt-1 font-medium">Màu thẻ</span>
+                        </div>
+                        <div class="p-2 rounded-xl border text-center" style="border-color: var(--border-color);">
+                            <input type="color" id="customAccentPicker" onchange="updateCustomColor('accent', this.value)" class="w-full h-8 rounded cursor-pointer border-0 bg-transparent">
+                            <span class="block mt-1 font-medium">Điểm nhấn</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-2">3. Kiểu phông chữ</label>
+                    <div class="grid grid-cols-3 gap-2 text-xs font-semibold">
+                        <button onclick="setFontStyle('font-classic')" id="fontBtn-font-classic" class="py-2.5 px-2 rounded-xl border text-center transition">Cổ điển</button>
+                        <button onclick="setFontStyle('font-handwriting')" id="fontBtn-font-handwriting" class="py-2.5 px-2 rounded-xl border text-center transition" style="font-family:'Caveat',cursive; font-size:15px;">Viết tay</button>
+                        <button onclick="setFontStyle('font-modern')" id="fontBtn-font-modern" class="py-2.5 px-2 rounded-xl border text-center transition">Hiện đại</button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-2">4. Kiểu khung thẻ kỷ niệm</label>
+                    <div class="grid grid-cols-3 gap-2 text-xs font-semibold">
+                        <button onclick="setCardStyle('card-polaroid')" id="cardBtn-card-polaroid" class="py-2.5 px-2 rounded-xl border text-center transition">Polaroid</button>
+                        <button onclick="setCardStyle('card-modern')" id="cardBtn-card-modern" class="py-2.5 px-2 rounded-xl border text-center transition">Hiện đại</button>
+                        <button onclick="setCardStyle('card-scrapbook')" id="cardBtn-card-scrapbook" class="py-2.5 px-2 rounded-xl border text-center transition">Sổ dán</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 mt-6 border-t" style="border-color: var(--border-color);">
+                <button onclick="closeThemeDrawer()" class="w-full py-3 rounded-xl bg-theme-accent text-white font-semibold text-sm shadow">
+                    Hoàn tất tùy chỉnh
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 4: XEM CHI TIẾT KỶ NIỆM (LIGHTBOX MODAL)                        -->
+    <!-- ===================================================================== -->
+    <div id="lightboxModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md" onclick="if(event.target===this) closeLightbox()">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] animate-fade-up">
+            <div class="md:w-3/5 bg-black flex items-center justify-center overflow-hidden max-h-[50vh] md:max-h-[85vh]">
+                <img id="lightboxImg" src="" alt="Ảnh phóng to" class="w-full h-full object-contain">
+            </div>
+
+            <div class="md:w-2/5 p-6 flex flex-col justify-between overflow-y-auto">
+                <div class="space-y-4">
+                    <div class="flex items-start justify-between gap-2">
+                        <span id="lightboxFriendBadge" class="px-3 py-1 rounded-full bg-theme-accent-soft text-theme-accent text-xs font-bold">
+                            👤 Bạn bè
+                        </span>
+                        <button onclick="closeLightbox()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 text-sm">✕</button>
+                    </div>
+
+                    <h3 id="lightboxTitle" class="heading-font text-2xl font-bold leading-snug">Tiêu đề kỷ niệm</h3>
+
+                    <div class="flex flex-wrap gap-3 text-xs text-theme-secondary">
+                        <span id="lightboxDate">📅 01/01/2025</span>
+                        <span id="lightboxLocation">📍 Hà Nội</span>
+                    </div>
+
+                    <p id="lightboxStory" class="story-font text-sm sm:text-base leading-relaxed whitespace-pre-line pt-2 border-t" style="border-color: var(--border-color);">
+                        Nội dung câu chuyện...
+                    </p>
+                </div>
+
+                <!-- Nút Sửa / Xóa ngay trong Lightbox (Chỉ hiện khi đã mở khóa) -->
+                <div id="lightboxActionsBox" class="edit-only hidden flex items-center justify-end gap-2 pt-6 mt-4 border-t" style="border-color: var(--border-color);">
+                    <button id="lightboxEditBtn" class="px-3.5 py-2 rounded-xl border text-xs font-semibold hover:bg-black/5 transition flex items-center gap-1">
+                        <span>✏️</span> Sửa
+                    </button>
+                    <button id="lightboxDeleteBtn" class="px-3.5 py-2 rounded-xl bg-rose-500/10 text-rose-600 border border-rose-500/20 text-xs font-semibold hover:bg-rose-500 hover:text-white transition flex items-center gap-1">
+                        <span>🗑️</span> Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 5: SAO LƯU & KHÔI PHỤC DỮ LIỆU (JSON BACKUP / RESTORE)          -->
+    <!-- ===================================================================== -->
+    <div id="backupModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-up">
+            <div class="flex items-center justify-between pb-3 border-b" style="border-color: var(--border-color);">
+                <h2 class="heading-font text-xl font-bold">Sao Lưu & Khôi Phục</h2>
+                <button onclick="closeBackupModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10">✕</button>
+            </div>
+
+            <div class="mt-4 space-y-4 text-sm">
+                <p class="text-theme-secondary leading-relaxed">
+                    Khi đã nối Firebase, sổ tự lưu trên máy chủ: ai mở app cũng thấy, đổi máy không mất. Bạn vẫn nên tải file sao lưu (<strong>.json</strong>) về máy để giữ thêm một bản. Chủ sổ có thể nhập file sao lưu cũ để đưa toàn bộ kỷ niệm lên máy chủ.
+                </p>
+                <p id="lastBackupInfo" class="text-xs font-semibold text-theme-accent"></p>
+
+                <div class="p-4 rounded-2xl border space-y-2.5" style="border-color: var(--border-color);">
+                    <div class="font-semibold">1. Xuất dữ liệu (Backup)</div>
+                    <p class="text-xs text-theme-secondary">Tải toàn bộ ảnh, lời nhắn và giao diện hiện tại thành 1 file.</p>
+                    <button onclick="exportDataJSON()" class="w-full py-2.5 rounded-xl bg-theme-accent text-white font-semibold text-xs sm:text-sm shadow hover:brightness-110 transition">
+                        ⬇️ Tải xuống file sao lưu (.json)
+                    </button>
+                </div>
+
+                <!-- Phần Khôi phục dữ liệu yêu cầu mở khóa -->
+                <div class="p-4 rounded-2xl border space-y-2.5" style="border-color: var(--border-color);">
+                    <div class="flex items-center justify-between">
+                        <div class="font-semibold">2. Khôi phục dữ liệu (Restore)</div>
+                        <span id="restoreLockHint" class="text-[11px] font-semibold text-amber-600">🔒 Cần đăng nhập</span>
+                    </div>
+                    <p class="text-xs text-theme-secondary">Chọn file sao lưu (.json) đã tải trước đó để khôi phục lại sổ kỷ niệm.</p>
+                    <div id="restoreUnlockedArea" class="edit-only hidden">
+                        <label class="w-full py-2.5 rounded-xl border font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer hover:bg-black/5 transition" style="border-color: var(--border-color);">
+                            <span>⬆️ Chọn file .json để nhập</span>
+                            <input type="file" accept=".json" class="hidden" onchange="importDataJSON(event)">
+                        </label>
+                    </div>
+                    <button id="restoreLockedBtn" onclick="closeBackupModal(); openUnlockModal();" class="w-full py-2.5 rounded-xl border font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-black/5 transition" style="border-color: var(--border-color);">
+                        <span>🔑 Đăng nhập chủ sổ để khôi phục</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL 6: NHẬP MẬT KHẨU MỞ KHÓA QUYỀN CHỈNH SỬA                        -->
+    <!-- ===================================================================== -->
+    <div id="unlockModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/65 backdrop-blur-sm">
+        <div id="unlockModalCard" class="bg-theme-card border rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl animate-fade-up">
+            <div class="w-14 h-14 rounded-2xl bg-theme-accent-soft text-theme-accent flex items-center justify-center text-2xl mx-auto mb-3">
+                🔐
+            </div>
+            <h3 class="heading-font text-xl font-bold mb-1">Đăng Nhập Chủ Sổ</h3>
+            <p class="text-theme-secondary text-xs sm:text-sm mb-4">
+                Đăng nhập tài khoản chủ sổ để thêm, sửa, xóa kỷ niệm hoặc đổi giao diện. Người khác chỉ cần mở app để xem.
+            </p>
+
+            <form onsubmit="handleUnlockSubmit(event)" class="space-y-3">
+                <input type="email" id="unlockEmailInput" required autocomplete="username"
+                       placeholder="Email chủ sổ"
+                       class="w-full px-4 py-3 rounded-xl border bg-transparent text-base focus:outline-none focus:ring-2"
+                       style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                <input type="password" id="unlockPasswordInput" required autocomplete="current-password"
+                       placeholder="Mật khẩu"
+                       class="w-full px-4 py-3 rounded-xl border bg-transparent text-base focus:outline-none focus:ring-2"
+                       style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);">
+                <p id="unlockErrorMsg" class="hidden text-xs font-semibold text-rose-500">
+                    ❌ Email hoặc mật khẩu không đúng.
+                </p>
+
+                <div class="flex gap-2.5 pt-2">
+                    <button type="button" onclick="closeUnlockModal()" class="flex-1 py-2.5 rounded-xl border text-sm font-medium hover:bg-black/5 transition" style="border-color: var(--border-color);">
+                        Đóng
+                    </button>
+                    <button type="submit" class="flex-1 py-2.5 rounded-xl bg-theme-accent text-white text-sm font-semibold shadow hover:brightness-110 transition">
+                        Đăng nhập
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- TRỢ LÝ AI HƯỚNG DẪN & HỖ TRỢ NHẬP LIỆU (FLOATING AI ASSISTANT)        -->
+    <!-- ===================================================================== -->
+    <button onclick="toggleAIChat()" id="aiFloatingBtn"
+            class="fixed bottom-5 right-5 z-40 px-4 py-3 rounded-full bg-theme-accent text-white shadow-xl hover:brightness-110 active:scale-95 transition-all flex items-center gap-2 font-semibold text-xs sm:text-sm border border-white/20">
+        <span class="text-base">✨</span>
+        <span>Trợ lý Kỷ Niệm AI</span>
+    </button>
+
+    <div id="aiChatWindow" class="fixed bottom-20 right-4 sm:right-5 z-40 w-[calc(100vw-2rem)] sm:w-96 max-h-[78vh] bg-theme-card border rounded-3xl shadow-2xl hidden flex-col overflow-hidden animate-fade-up" style="border-color: var(--border-color);">
+        <div class="px-4 py-3.5 bg-theme-accent text-white flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-base">🤖</div>
+                <div>
+                    <div class="font-bold text-sm leading-tight">Trợ Lý Sổ Kỷ Niệm</div>
+                    <div id="aiModeLabel" class="text-[11px] opacity-90">Chế độ cơ bản</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-1">
+                <button onclick="clearAIChat()" title="Xóa cuộc trò chuyện" class="w-7 h-7 rounded-full hover:bg-white/20 flex items-center justify-center text-sm transition">🧹</button>
+                <button onclick="toggleAISettings()" title="Cài đặt AI" class="w-7 h-7 rounded-full hover:bg-white/20 flex items-center justify-center text-sm transition">⚙️</button>
+                <button onclick="toggleAIChat()" title="Đóng" class="w-7 h-7 rounded-full hover:bg-white/20 flex items-center justify-center text-sm transition">✕</button>
+            </div>
+        </div>
+
+        <!-- Cài đặt AI: API key chỉ lưu trên trình duyệt này, KHÔNG nằm trong code -->
+        <div id="aiSettingsPanel" class="hidden p-4 border-b space-y-2.5 text-xs" style="border-color: var(--border-color);">
+            <div class="font-semibold text-sm">⚙️ Cài đặt AI (Claude)</div>
+            <p class="text-theme-secondary leading-relaxed">Nhập API key Claude (tạo tại console.anthropic.com, dạng sk-ant-...) để bật chế độ thông minh. Key chỉ lưu trên trình duyệt này, không nằm trong file sao lưu. Đừng nhập key trên máy người khác.</p>
+            <input type="password" id="aiApiKeyInput" placeholder="Dán API key..." autocomplete="off"
+                   class="w-full px-3 py-2 rounded-xl border bg-transparent focus:outline-none" style="border-color: var(--border-color);">
+            <input type="text" id="aiModelInput" placeholder="Tên model, VD: claude-haiku-5-5"
+                   class="w-full px-3 py-2 rounded-xl border bg-transparent focus:outline-none" style="border-color: var(--border-color);">
+            <div class="flex gap-2">
+                <button onclick="removeAISettings()" class="flex-1 py-2 rounded-xl border font-medium hover:bg-black/5" style="border-color: var(--border-color);">Xóa key</button>
+                <button onclick="saveAISettingsFromForm()" class="flex-1 py-2 rounded-xl bg-theme-accent text-white font-semibold hover:brightness-110">Lưu</button>
+            </div>
+        </div>
+
+        <div id="aiMessagesContainer" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm max-h-[340px]"></div>
+
+        <div class="px-3 py-2 border-t flex gap-1.5 overflow-x-auto bg-black/[0.02]" style="border-color: var(--border-color);">
+            <button onclick="sendQuickPrompt('Hướng dẫn tôi cách sử dụng trang web này')" class="ai-chip">📖 Cách dùng</button>
+            <button onclick="sendQuickPrompt('Thống kê sổ kỷ niệm của tôi')" class="ai-chip">📊 Thống kê</button>
+            <button onclick="sendQuickPrompt('Ngày này năm xưa có kỷ niệm gì?')" class="ai-chip">📅 Ngày này năm xưa</button>
+            <button onclick="sendQuickPrompt('Tạo giúp tôi 1 kỷ niệm đi uống trà sữa với Minh Anh hôm nay ở Quận 1')" class="ai-chip">✨ Tạo thẻ nhanh</button>
+            <button onclick="sendQuickPrompt('Gợi ý cho tôi 3 lời nhắn hay để ghi vào sổ lưu bút bạn thân')" class="ai-chip">💌 Gợi ý lời nhắn</button>
+            <button onclick="sendQuickPrompt('Đổi sang giao diện trời đêm')" class="ai-chip">🌌 Giao diện tối</button>
+            <button onclick="openBulkModal()" class="ai-chip">👥 Tạo nhiều kỷ niệm</button>
+            <button onclick="sendQuickPrompt('Sao lưu dữ liệu giúp tôi')" class="ai-chip">💾 Sao lưu</button>
+        </div>
+
+        <form onsubmit="handleAIChatSubmit(event)" class="p-3 border-t flex gap-2 items-end" style="border-color: var(--border-color);">
+            <button type="button" id="aiMicBtn" onclick="toggleVoiceInput()" title="Nói bằng giọng nói" class="hidden w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 hover:bg-black/5 transition" style="border-color: var(--border-color);">🎤</button>
+            <!-- Ô nhiều dòng để dán được danh sách tên. Enter = gửi, Shift+Enter = xuống dòng -->
+            <textarea id="aiChatInput" rows="1" placeholder="Kể kỷ niệm, hỏi, hoặc dán danh sách tên..."
+                      onkeydown="handleChatKeydown(event)" oninput="autoGrowChatInput(this)"
+                      class="flex-1 min-w-0 px-3.5 py-2 rounded-xl border bg-transparent text-xs sm:text-sm focus:outline-none focus:ring-2 resize-none max-h-32 leading-snug"
+                      style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);"></textarea>
+            <button type="submit" id="aiSendBtn" class="px-3.5 py-2 rounded-xl bg-theme-accent text-white text-xs sm:text-sm font-semibold hover:brightness-110 transition shrink-0 disabled:opacity-50">
+                Gửi
+            </button>
+        </form>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL: TẠO NHIỀU KỶ NIỆM CÙNG LÚC (DÁN DANH SÁCH TÊN)                 -->
+    <!-- ===================================================================== -->
+    <div id="bulkModal" class="fixed inset-0 z-50 hidden items-start sm:items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-2xl p-6 shadow-2xl my-8 animate-fade-up">
+            <div class="flex items-center justify-between pb-4 border-b" style="border-color: var(--border-color);">
+                <h2 class="heading-font text-xl font-bold">Tạo Nhiều Kỷ Niệm 👥</h2>
+                <button onclick="closeBulkModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 transition">✕</button>
+            </div>
+
+            <!-- Bước 1: dán tên -->
+            <div id="bulkStepInput" class="space-y-4 mt-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Danh sách tên *</label>
+                    <textarea id="bulkNamesInput" rows="6" placeholder="Dán tên vào đây, mỗi dòng một người hoặc cách nhau bằng dấu phẩy.&#10;VD:&#10;Minh Anh&#10;Hoàng Nam&#10;Thu Trang"
+                              oninput="updateBulkNameCount()"
+                              class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none focus:ring-2"
+                              style="border-color: var(--border-color); --tw-ring-color: var(--accent-color);"></textarea>
+                    <p id="bulkNameCount" class="text-xs text-theme-secondary mt-1">Chưa có tên nào.</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="sm:col-span-3">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Dịp / chủ đề chung (không bắt buộc)</label>
+                        <input type="text" id="bulkOccasionInput" placeholder="VD: Lễ bế giảng lớp A12, chuyến đi Vũng Tàu, lưu bút cuối cấp…"
+                               class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border-color);">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Ngày</label>
+                        <input type="date" id="bulkDateInput" class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border-color);">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-theme-secondary mb-1.5">Địa điểm</label>
+                        <input type="text" id="bulkLocationInput" placeholder="VD: Sân trường"
+                               class="w-full px-4 py-2.5 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border-color);">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-2.5 pt-3 border-t" style="border-color: var(--border-color);">
+                    <button type="button" onclick="closeBulkModal()" class="px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-black/5" style="border-color: var(--border-color);">Hủy</button>
+                    <button type="button" id="bulkGenerateBtn" onclick="generateBulkDrafts()" class="px-5 py-2.5 rounded-xl bg-theme-accent text-white text-sm font-semibold shadow-md hover:brightness-110 disabled:opacity-50">✨ Viết lời nhắn</button>
+                </div>
+            </div>
+
+            <!-- Bước 2: xem lại & lưu -->
+            <div id="bulkStepReview" class="hidden mt-4 space-y-3">
+                <p id="bulkReviewNote" class="text-xs text-theme-secondary"></p>
+                <div id="bulkDraftList" class="space-y-3 max-h-[55vh] overflow-y-auto pr-1"></div>
+                <div class="flex flex-wrap items-center justify-between gap-2.5 pt-3 border-t" style="border-color: var(--border-color);">
+                    <button type="button" onclick="showBulkStep('input')" class="px-4 py-2.5 rounded-xl border text-sm font-medium hover:bg-black/5" style="border-color: var(--border-color);">← Sửa danh sách</button>
+                    <button type="button" id="bulkSaveBtn" onclick="saveBulkDrafts()" class="px-5 py-2.5 rounded-xl bg-theme-accent text-white text-sm font-semibold shadow-md hover:brightness-110 disabled:opacity-50">Lưu tất cả</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- HỘP THOẠI XÁC NHẬN XÓA & THÔNG BÁO TOAST                             -->
+    <!-- ===================================================================== -->
+    <div id="confirmDeleteModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div class="bg-theme-card border rounded-3xl w-full max-w-sm p-6 text-center shadow-2xl animate-fade-up">
+            <div class="text-4xl mb-2">🥺</div>
+            <h3 class="heading-font text-lg font-bold mb-1">Xóa kỷ niệm này?</h3>
+            <p class="text-theme-secondary text-sm mb-5">Bạn có chắc muốn xóa kỷ niệm này khỏi sổ lưu giữ không? Hành động này không thể hoàn tác.</p>
+            <div class="flex gap-2.5 justify-center">
+                <button onclick="closeConfirmDelete()" class="flex-1 py-2.5 rounded-xl border text-sm font-medium hover:bg-black/5" style="border-color: var(--border-color);">Giữ lại</button>
+                <button id="confirmDeleteBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700">Xóa luôn</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastNotification" class="fixed bottom-20 left-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs sm:text-sm font-medium shadow-xl flex items-center gap-2 border border-white/10">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Đã lưu thay đổi!</span>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * =====================================================================
+         * QUẢN LÝ TRẠNG THÁI, KHÓA BẢO MẬT & DỮ LIỆU MẪU BAN ĐẦU
+         * =====================================================================
+         */
+        const STORAGE_KEY = 'so_ky_niem_a12_v1';
+        // Quyền sửa: đăng nhập Firebase bằng email chủ sổ (xem firebase-config.js).
+        // Bảo mật thật nằm ở Rules của Firestore trên máy chủ, không nằm trong code này.
+
+        // Trạng thái khóa quyền chỉnh sửa (Mặc định là Khóa = false)
+        let isEditUnlocked = false;
+        let pendingUnlockCallback = null;
+
+        const PRESET_THEMES = {
+            vintage: {
+                bg: '#fdf8f0', card: '#ffffff', textPrimary: '#2d241e', textSecondary: '#6e5d52',
+                accent: '#d97706', accentSoft: '#fef3c7', border: '#ebd9c3'
+            },
+            pastel: {
+                bg: '#fff5f7', card: '#ffffff', textPrimary: '#4a2532', textSecondary: '#8c5367',
+                accent: '#e11d48', accentSoft: '#ffe4e6', border: '#fbcfe8'
+            },
+            midnight: {
+                bg: '#0f172a', card: '#1e293b', textPrimary: '#f8fafc', textSecondary: '#94a3b8',
+                accent: '#38bdf8', accentSoft: '#0c4a6e', border: '#334155'
+            },
+            mint: {
+                bg: '#f0fdf4', card: '#ffffff', textPrimary: '#143322', textSecondary: '#4d7c63',
+                accent: '#059669', accentSoft: '#d1fae5', border: '#bbf7d0'
+            },
+            sunset: {
+                bg: '#fff7ed', card: '#ffffff', textPrimary: '#431407', textSecondary: '#9a3412',
+                accent: '#ea580c', accentSoft: '#ffedd5', border: '#fed7aa'
+            }
+        };
+
+        const DEFAULT_DATA = {
+            header: {
+                title: 'Thanh Xuân & Những Người Bạn ✨',
+                subtitle: 'Nơi lưu giữ những khoảnh khắc rực rỡ, những chuyến đi và nụ cười của chúng ta theo năm tháng.',
+                coverImg: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80',
+                avatarImg: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80'
+            },
+            theme: {
+                bg: '#fdf8f0',
+                card: '#ffffff',
+                textPrimary: '#2d241e',
+                textSecondary: '#6e5d52',
+                accent: '#d97706',
+                accentSoft: '#fef3c7',
+                border: '#ebd9c3',
+                fontClass: 'font-classic',
+                cardClass: 'card-polaroid'
+            },
+            memories: [] // dữ liệu thật nằm trên máy chủ Firebase
+        };
+
+        let appData = loadAppData();
+        let activeFriendFilter = 'ALL';
+        let currentUploadedImageBase64 = '';
+        let pendingDeleteId = null;
+
+        /**
+         * =====================================================================
+         * HỆ THỐNG KHÓA / MỞ KHÓA QUYỀN CHỈNH SỬA
+         * =====================================================================
+         */
+        function updateLockUI() {
+            const btn = document.getElementById('lockStatusBtn');
+            const icon = document.getElementById('lockStatusIcon');
+            const text = document.getElementById('lockStatusText');
+            const editElements = document.querySelectorAll('.edit-only');
+            const restoreHint = document.getElementById('restoreLockHint');
+            const restoreLockedBtn = document.getElementById('restoreLockedBtn');
+
+            if (isEditUnlocked) {
+                icon.textContent = '👑';
+                text.textContent = cloudMode === 'cloud' ? 'Chủ sổ · Đăng xuất' : 'Trên máy này';
+                btn.className = 'px-3 py-2 rounded-xl border transition flex items-center gap-1.5 text-xs sm:text-sm font-semibold shadow-sm bg-emerald-500/15 text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/25';
+                editElements.forEach(el => el.classList.remove('hidden'));
+                if (restoreHint) restoreHint.classList.add('hidden');
+                if (restoreLockedBtn) restoreLockedBtn.classList.add('hidden');
+            } else {
+                icon.textContent = cloudMode === 'loading' ? '⏳' : '🔒';
+                text.textContent = cloudMode === 'loading' ? 'Đang tải…' : (currentUser ? 'Đăng xuất' : 'Đăng nhập');
+                btn.className = 'px-3 py-2 rounded-xl border transition flex items-center gap-1.5 text-xs sm:text-sm font-semibold shadow-sm bg-amber-500/15 text-amber-700 border-amber-500/30 hover:bg-amber-500/25';
+                editElements.forEach(el => el.classList.add('hidden'));
+                if (restoreHint) restoreHint.classList.remove('hidden');
+                if (restoreLockedBtn) restoreLockedBtn.classList.remove('hidden');
+            }
+        }
+
+        async function handleLockButtonClick() {
+            if (cloudMode === 'loading') return showToast('Đang kết nối máy chủ…', '⏳');
+            if (cloudMode === 'local') {
+                return showToast(cloudError || 'Chưa nối Firebase: dữ liệu chỉ lưu trên máy này.', 'ℹ️');
+            }
+            if (currentUser) {
+                await fb.signOut(fb.auth);
+                closeThemeDrawer();
+                showToast('Đã đăng xuất.', '👋');
+            } else {
+                openUnlockModal();
+            }
+        }
+
+        function requestUnlockOrAction(callback) {
+            if (isEditUnlocked) {
+                callback();
+            } else {
+                pendingUnlockCallback = callback;
+                openUnlockModal();
+            }
+        }
+
+        function openUnlockModal() {
+            if (cloudMode !== 'cloud') {
+                showToast(cloudMode === 'loading' ? 'Đang kết nối máy chủ…' : (cloudError || 'Chưa nối Firebase.'), 'ℹ️');
+                return;
+            }
+            const emailInput = document.getElementById('unlockEmailInput');
+            document.getElementById('unlockPasswordInput').value = '';
+            document.getElementById('unlockErrorMsg').classList.add('hidden');
+            document.getElementById('unlockModal').classList.replace('hidden', 'flex');
+            setTimeout(() => (emailInput.value ? document.getElementById('unlockPasswordInput') : emailInput).focus(), 100);
+        }
+
+        function closeUnlockModal() {
+            document.getElementById('unlockModal').classList.replace('flex', 'hidden');
+            pendingUnlockCallback = null;
+        }
+
+        async function handleUnlockSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('unlockEmailInput').value.trim();
+            const password = document.getElementById('unlockPasswordInput').value;
+            const errorMsg = document.getElementById('unlockErrorMsg');
+            const modalCard = document.getElementById('unlockModalCard');
+            const btn = e.submitter;
+            if (btn) btn.disabled = true;
+            try {
+                await fb.signInWithEmailAndPassword(fb.auth, email, password);
+                const cb = pendingUnlockCallback;
+                closeUnlockModal();
+                pendingUnlockCallback = cb; // onAuthStateChanged sẽ chạy tiếp việc đang dở
+                showToast('Đăng nhập thành công!', '🔓');
+            } catch (err) {
+                errorMsg.textContent = err && err.code === 'auth/too-many-requests'
+                    ? '❌ Sai quá nhiều lần, đợi vài phút rồi thử lại.'
+                    : err && err.code === 'auth/network-request-failed'
+                        ? '❌ Mất mạng, kiểm tra kết nối.'
+                        : '❌ Email hoặc mật khẩu không đúng.';
+                errorMsg.classList.remove('hidden');
+                modalCard.classList.remove('animate-shake');
+                void modalCard.offsetWidth;
+                modalCard.classList.add('animate-shake');
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function loadAppData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    return normalizeAppData(parsed) || JSON.parse(JSON.stringify(DEFAULT_DATA));
+                }
+            } catch (e) {
+                console.error('Lỗi đọc dữ liệu:', e);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_DATA));
+        }
+
+        // Kiểm tra & làm sạch dữ liệu (dùng khi đọc bộ nhớ và khi nhập file sao lưu)
+        // để một file hỏng hoặc thiếu trường không làm trang bị lỗi.
+        function normalizeMemory(m, index) {
+            if (!m || typeof m !== 'object') return null;
+            const str = (v) => (typeof v === 'string' ? v : (v == null ? '' : String(v)));
+            const friendName = str(m.friendName).trim();
+            const title = str(m.title).trim();
+            if (!friendName && !title) return null;
+            const date = /^\d{4}-\d{2}-\d{2}$/.test(str(m.date)) ? m.date : '';
+            return {
+                id: (/^[A-Za-z0-9_-]{1,100}$/.test(str(m.id).trim()) ? str(m.id).trim() : '') || `mem_${Date.now()}_${index}`,
+                friendName: friendName || 'Không tên',
+                title: title || 'Kỷ niệm',
+                date,
+                location: str(m.location).trim(),
+                image: str(m.image).trim(),
+                story: str(m.story)
+            };
+        }
+
+        function normalizeAppData(data) {
+            if (!data || !Array.isArray(data.memories)) return null;
+            const memories = data.memories.map(normalizeMemory).filter(Boolean);
+            // Tránh trùng id (nếu trùng thì tạo id mới)
+            const seen = new Set();
+            memories.forEach((m, i) => {
+                if (seen.has(m.id)) m.id = `mem_${Date.now()}_${i}`;
+                seen.add(m.id);
+            });
+            return {
+                header: { ...DEFAULT_DATA.header, ...(data.header || {}) },
+                theme: { ...DEFAULT_DATA.theme, ...(data.theme || {}) },
+                memories
+            };
+        }
+
+        // Bản sao trên trình duyệt: chế độ trên máy thì đây là dữ liệu chính,
+        // chế độ máy chủ thì chỉ là bản tạm để mở app nhanh (không kèm ảnh cho nhẹ).
+        function cacheAppDataLocally() {
+            try {
+                const data = cloudMode === 'cloud'
+                    ? { ...appData, memories: appData.memories.map(m => ({ ...m, image: '' })) }
+                    : appData;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function saveAppData() {
+            const ok = cacheAppDataLocally();
+            if (!ok && cloudMode !== 'cloud') showToast('Bộ nhớ trình duyệt đã đầy! Hãy tải file sao lưu JSON.', '⚠️');
+            if (isEditUnlocked) recordDataChange(); // đếm thay đổi chưa tải bản sao lưu
+        }
+
+        /**
+         * =====================================================================
+         * NÉN ẢNH THÔNG MINH BẰNG CANVAS
+         * =====================================================================
+         */
+        function compressImageFile(file, maxWidth = 900, quality = 0.78) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.onerror = reject;
+                    img.src = event.target.result;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /**
+         * =====================================================================
+         * QUẢN LÝ PHẦN ĐẦU TRANG (HERO HEADER)
+         * =====================================================================
+         */
+        function renderHeader() {
+            document.getElementById('pageTitleDisplay').textContent = appData.header.title;
+            document.getElementById('pageSubtitleDisplay').textContent = appData.header.subtitle;
+            document.getElementById('pageCoverImg').src = safeImageSrc(appData.header.coverImg, DEFAULT_DATA.header.coverImg);
+            document.getElementById('pageAvatarImg').src = safeImageSrc(appData.header.avatarImg, DEFAULT_DATA.header.avatarImg);
+        }
+
+        function openHeaderEditModal() {
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(openHeaderEditModal);
+                return;
+            }
+            document.getElementById('editPageTitle').value = appData.header.title;
+            document.getElementById('editPageSubtitle').value = appData.header.subtitle;
+            document.getElementById('editCoverUrl').value = appData.header.coverImg;
+            document.getElementById('editAvatarUrl').value = appData.header.avatarImg;
+            document.getElementById('headerEditModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeHeaderEditModal() {
+            document.getElementById('headerEditModal').classList.replace('flex', 'hidden');
+        }
+
+        async function handleHeaderFileUpload(event, targetType) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const maxW = targetType === 'cover' ? 1200 : 400;
+                const compressed = await compressImageFile(file, maxW, 0.8);
+                if (targetType === 'cover') {
+                    document.getElementById('editCoverUrl').value = compressed;
+                } else {
+                    document.getElementById('editAvatarUrl').value = compressed;
+                }
+                showToast('Đã tải ảnh lên thành công!', '🖼️');
+            } catch (err) {
+                showToast('Không thể đọc file ảnh này.', '❌');
+            }
+        }
+
+        function handleSaveHeader(e) {
+            e.preventDefault();
+            appData.header.title = document.getElementById('editPageTitle').value.trim() || DEFAULT_DATA.header.title;
+            appData.header.subtitle = document.getElementById('editPageSubtitle').value.trim();
+            appData.header.coverImg = document.getElementById('editCoverUrl').value.trim() || DEFAULT_DATA.header.coverImg;
+            appData.header.avatarImg = document.getElementById('editAvatarUrl').value.trim() || DEFAULT_DATA.header.avatarImg;
+
+            saveAppData();
+            renderHeader();
+            persistSettings();
+            closeHeaderEditModal();
+            showToast('Đã cập nhật thông tin trang!', '✨');
+        }
+
+        /**
+         * =====================================================================
+         * QUẢN LÝ KỶ NIỆM & DANH SÁCH BẠN BÈ
+         * =====================================================================
+         */
+        function openMemoryModal(memoryId = null, prefillData = null) {
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(() => openMemoryModal(memoryId, prefillData));
+                return;
+            }
+            updateFriendDatalist();
+            const form = document.getElementById('memoryForm');
+            form.reset();
+            clearSelectedImage();
+            switchImageInputMode('upload');
+
+            if (memoryId) {
+                const mem = appData.memories.find(m => m.id === memoryId);
+                if (!mem) return;
+                document.getElementById('memoryModalTitle').textContent = 'Chỉnh Sửa Kỷ Niệm ✏️';
+                document.getElementById('memoryId').value = mem.id;
+                document.getElementById('friendNameInput').value = mem.friendName;
+                document.getElementById('memoryTitleInput').value = mem.title;
+                document.getElementById('memoryDateInput').value = mem.date || '';
+                document.getElementById('memoryLocationInput').value = mem.location || '';
+                document.getElementById('memoryStoryInput').value = mem.story;
+                if (mem.image) {
+                    setPreviewImage(mem.image);
+                }
+                // Gợi ý từ AI (VD: viết lại lời nhắn) sẽ ghi đè lên các ô tương ứng
+                if (prefillData) {
+                    if (prefillData.title) document.getElementById('memoryTitleInput').value = prefillData.title;
+                    if (prefillData.location) document.getElementById('memoryLocationInput').value = prefillData.location;
+                    if (prefillData.story) document.getElementById('memoryStoryInput').value = prefillData.story;
+                }
+            } else {
+                document.getElementById('memoryModalTitle').textContent = 'Thêm Kỷ Niệm Mới ✨';
+                document.getElementById('memoryId').value = '';
+                document.getElementById('memoryDateInput').value = (prefillData && /^\d{4}-\d{2}-\d{2}$/.test(prefillData.date || '') && prefillData.date) || getTodayLocal();
+
+                if (prefillData) {
+                    if (prefillData.friendName) document.getElementById('friendNameInput').value = prefillData.friendName;
+                    if (prefillData.title) document.getElementById('memoryTitleInput').value = prefillData.title;
+                    if (prefillData.location) document.getElementById('memoryLocationInput').value = prefillData.location;
+                    if (prefillData.story) document.getElementById('memoryStoryInput').value = prefillData.story;
+                }
+            }
+
+            document.getElementById('memoryModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeMemoryModal() {
+            document.getElementById('memoryModal').classList.replace('flex', 'hidden');
+        }
+
+        function updateFriendDatalist() {
+            const datalist = document.getElementById('existingFriendsList');
+            const uniqueNames = [...new Set(appData.memories.map(m => m.friendName.trim()).filter(Boolean))];
+            datalist.innerHTML = uniqueNames.map(name => `<option value="${escapeHtml(name)}">`).join('');
+        }
+
+        function switchImageInputMode(mode) {
+            const uploadArea = document.getElementById('uploadFileArea');
+            const urlArea = document.getElementById('urlInputArea');
+            const tabUpload = document.getElementById('tabUploadFile');
+            const tabUrl = document.getElementById('tabImageUrl');
+
+            if (mode === 'upload') {
+                uploadArea.classList.remove('hidden');
+                urlArea.classList.add('hidden');
+                tabUpload.className = 'px-2.5 py-1 rounded-lg bg-theme-accent text-white font-medium';
+                tabUrl.className = 'px-2.5 py-1 rounded-lg border font-medium';
+            } else {
+                uploadArea.classList.add('hidden');
+                urlArea.classList.remove('hidden');
+                tabUrl.className = 'px-2.5 py-1 rounded-lg bg-theme-accent text-white font-medium';
+                tabUpload.className = 'px-2.5 py-1 rounded-lg border font-medium';
+            }
+        }
+
+        async function handleImageFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            try {
+                const compressedBase64 = await compressImageFile(file, 900, 0.78);
+                setPreviewImage(compressedBase64);
+                showToast('Đã tải ảnh lên!', '📸');
+            } catch (err) {
+                showToast('Lỗi xử lý ảnh. Vui lòng thử ảnh khác.', '❌');
+            }
+        }
+
+        function handleImageUrlPreview(url) {
+            if (url && url.trim().startsWith('http')) {
+                setPreviewImage(url.trim());
+            }
+        }
+
+        function setPreviewImage(src) {
+            currentUploadedImageBase64 = src;
+            const previewBox = document.getElementById('imagePreviewBox');
+            const previewImg = document.getElementById('imagePreviewImg');
+            previewImg.src = src;
+            previewBox.classList.remove('hidden');
+        }
+
+        function clearSelectedImage() {
+            currentUploadedImageBase64 = '';
+            document.getElementById('imageFileInput').value = '';
+            document.getElementById('imageUrlInput').value = '';
+            document.getElementById('imagePreviewBox').classList.add('hidden');
+        }
+
+        function handleSaveMemory(e) {
+            e.preventDefault();
+            const id = document.getElementById('memoryId').value;
+            const friendName = document.getElementById('friendNameInput').value.trim();
+            const title = document.getElementById('memoryTitleInput').value.trim();
+            const date = document.getElementById('memoryDateInput').value;
+            const location = document.getElementById('memoryLocationInput').value.trim();
+            const story = document.getElementById('memoryStoryInput').value.trim();
+
+            const fallbackImg = ''; // không có ảnh → hiện ảnh mặc định
+            const finalImage = currentUploadedImageBase64 || fallbackImg;
+
+            if (id) {
+                const index = appData.memories.findIndex(m => m.id === id);
+                if (index !== -1) {
+                    appData.memories[index] = {
+                        ...appData.memories[index],
+                        friendName, title, date, location, story, image: finalImage
+                    };
+                    persistMemory(appData.memories[index]);
+                    showToast('Đã cập nhật kỷ niệm!', '✅');
+                }
+            } else {
+                const newMemory = {
+                    id: 'mem_' + Date.now(),
+                    friendName,
+                    title,
+                    date,
+                    location,
+                    image: finalImage,
+                    story
+                };
+                appData.memories.unshift(newMemory);
+                persistMemory(newMemory);
+                showToast('Đã lưu kỷ niệm mới!', '🎉');
+            }
+
+            saveAppData();
+            renderFriendFilters();
+            renderMemories();
+            closeMemoryModal();
+        }
+
+        function askDeleteMemory(id, event) {
+            if (event) event.stopPropagation();
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(() => askDeleteMemory(id));
+                return;
+            }
+            pendingDeleteId = id;
+            document.getElementById('confirmDeleteModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeConfirmDelete() {
+            pendingDeleteId = null;
+            document.getElementById('confirmDeleteModal').classList.replace('flex', 'hidden');
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            if (!pendingDeleteId) return;
+            const deletedId = pendingDeleteId;
+            appData.memories = appData.memories.filter(m => m.id !== deletedId);
+            saveAppData();
+            removeMemoryFromCloud(deletedId);
+            renderFriendFilters();
+            renderMemories();
+            closeConfirmDelete();
+            closeLightbox();
+            showToast('Đã xóa kỷ niệm.', '🗑️');
+        });
+
+        /**
+         * =====================================================================
+         * HIỂN THỊ BỘ LỌC BẠN BÈ & LƯỚI THẺ KỶ NIỆM
+         * =====================================================================
+         */
+        function renderFriendFilters() {
+            const container = document.getElementById('friendFilterPills');
+            const friendCounts = {};
+
+            appData.memories.forEach(m => {
+                const name = m.friendName.trim();
+                friendCounts[name] = (friendCounts[name] || 0) + 1;
+            });
+
+            const uniqueFriends = Object.keys(friendCounts);
+
+            document.getElementById('statMemoriesCount').textContent = `${appData.memories.length} kỷ niệm`;
+            document.getElementById('statFriendsCount').textContent = `${uniqueFriends.length} người bạn`;
+
+            if (activeFriendFilter !== 'ALL' && !friendCounts[activeFriendFilter]) {
+                activeFriendFilter = 'ALL';
+            }
+
+            let html = `
+                <button onclick="setFriendFilter('ALL')" 
+                        class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition border ${
+                            activeFriendFilter === 'ALL'
+                                ? 'bg-theme-accent text-white border-transparent shadow-sm'
+                                : 'bg-theme-card hover:opacity-80'
+                        }">
+                    Tất cả (${appData.memories.length})
+                </button>
+            `;
+
+            uniqueFriends.forEach(name => {
+                const isActive = activeFriendFilter === name;
+                html += `
+                    <button data-friend="${escapeHtml(name)}" onclick="setFriendFilter(this.dataset.friend)"
+                            class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition border flex items-center gap-1.5 ${
+                                isActive
+                                    ? 'bg-theme-accent text-white border-transparent shadow-sm'
+                                    : 'bg-theme-card hover:opacity-80'
+                            }">
+                        <span>👤 ${escapeHtml(name)}</span>
+                        <span class="opacity-75 text-xs">(${friendCounts[name]})</span>
+                    </button>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function setFriendFilter(friendName) {
+            activeFriendFilter = friendName;
+            renderFriendFilters();
+            renderMemories();
+        }
+
+        function renderMemories() {
+            const grid = document.getElementById('memoriesGrid');
+            const emptyState = document.getElementById('emptyState');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const sortBy = document.getElementById('sortSelect').value;
+
+            let filtered = appData.memories.filter(mem => {
+                const matchFriend = activeFriendFilter === 'ALL' || mem.friendName.trim() === activeFriendFilter;
+                const matchQuery = !query ||
+                    mem.friendName.toLowerCase().includes(query) ||
+                    mem.title.toLowerCase().includes(query) ||
+                    (mem.location && mem.location.toLowerCase().includes(query)) ||
+                    mem.story.toLowerCase().includes(query);
+                return matchFriend && matchQuery;
+            });
+
+            filtered.sort((a, b) => {
+                if (sortBy === 'newest') return (b.date || '').localeCompare(a.date || '');
+                if (sortBy === 'oldest') return (a.date || '').localeCompare(b.date || '');
+                if (sortBy === 'name') return a.friendName.localeCompare(b.friendName, 'vi');
+                return 0;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                updateEmptyStateText();
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            const cardStyleClass = appData.theme.cardClass || 'card-polaroid';
+
+            grid.innerHTML = filtered.map((mem, idx) => {
+                const formattedDate = formatDateVN(mem.date);
+                return `
+                    <article data-id="${escapeHtml(mem.id)}" onclick="openLightbox(this.dataset.id)" style="animation-delay: ${idx * 40}ms"
+                             class="bg-theme-card border ${cardStyleClass} flex flex-col justify-between cursor-pointer group animate-fade-up">
+                        <div>
+                            <div class="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-slate-100 mb-3.5">
+                                <img src="${escapeHtml(safeImageSrc(mem.image, 'icons/placeholder.svg'))}" loading="lazy"
+                                     onerror="this.onerror=null;this.src='icons/placeholder.svg'"
+                                     alt="${escapeHtml(mem.title)}" 
+                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                
+                                <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-black/60 text-white backdrop-blur-md shadow-sm">
+                                    👤 ${escapeHtml(mem.friendName)}
+                                </span>
+
+                                ${isEditUnlocked ? `
+                                <div class="absolute top-3 right-3 flex gap-1.5 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                    <button onclick="event.stopPropagation(); openMemoryModal(this.closest('article').dataset.id)" title="Sửa kỷ niệm"
+                                            class="w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow flex items-center justify-center text-xs transition">
+                                        ✏️
+                                    </button>
+                                    <button onclick="askDeleteMemory(this.closest('article').dataset.id, event)" title="Xóa kỷ niệm"
+                                            class="w-8 h-8 rounded-full bg-white/90 hover:bg-rose-600 hover:text-white text-rose-600 shadow flex items-center justify-center text-xs transition">
+                                        🗑️
+                                    </button>
+                                </div>
+                                ` : ''}
+                            </div>
+
+                            <div class="${cardStyleClass === 'card-modern' ? 'px-5 pb-5' : 'px-1'}">
+                                <div class="flex items-center gap-2 text-xs text-theme-secondary mb-1.5">
+                                    ${formattedDate ? `<span>📅 ${formattedDate}</span>` : ''}
+                                    ${mem.location ? `<span>• 📍 ${escapeHtml(mem.location)}</span>` : ''}
+                                </div>
+
+                                <h3 class="heading-font text-lg sm:text-xl font-bold leading-snug mb-2 group-hover:text-theme-accent transition-colors">
+                                    ${escapeHtml(mem.title)}
+                                </h3>
+
+                                <p class="story-font text-theme-secondary text-sm line-clamp-3 leading-relaxed">
+                                    ${escapeHtml(mem.story)}
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        /**
+         * =====================================================================
+         * XEM CHI TIẾT KỶ NIỆM (LIGHTBOX)
+         * =====================================================================
+         */
+        function openLightbox(memoryId) {
+            const mem = appData.memories.find(m => m.id === memoryId);
+            if (!mem) return;
+
+            document.getElementById('lightboxImg').src = safeImageSrc(mem.image, 'icons/placeholder.svg');
+            document.getElementById('lightboxFriendBadge').textContent = `👤 ${mem.friendName}`;
+            document.getElementById('lightboxTitle').textContent = mem.title;
+            document.getElementById('lightboxDate').textContent = mem.date ? `📅 ${formatDateVN(mem.date)}` : '';
+            document.getElementById('lightboxLocation').textContent = mem.location ? `📍 ${mem.location}` : '';
+            document.getElementById('lightboxStory').textContent = mem.story;
+
+            document.getElementById('lightboxEditBtn').onclick = () => {
+                closeLightbox();
+                openMemoryModal(mem.id);
+            };
+            document.getElementById('lightboxDeleteBtn').onclick = (e) => {
+                askDeleteMemory(mem.id, e);
+            };
+
+            document.getElementById('lightboxModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightboxModal').classList.replace('flex', 'hidden');
+        }
+
+        /**
+         * =====================================================================
+         * HỆ THỐNG TÙY CHỈNH GIAO DIỆN (THEME, FONT, CARD STYLE)
+         * =====================================================================
+         */
+        function openThemeDrawer() {
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(openThemeDrawer);
+                return;
+            }
+            document.getElementById('themeDrawer').classList.replace('hidden', 'flex');
+        }
+
+        function closeThemeDrawer() {
+            document.getElementById('themeDrawer').classList.replace('flex', 'hidden');
+        }
+
+        function applyThemeToDOM() {
+            const t = appData.theme;
+            const root = document.documentElement;
+            root.style.setProperty('--bg-color', t.bg);
+            root.style.setProperty('--card-color', t.card);
+            root.style.setProperty('--text-primary', t.textPrimary);
+            root.style.setProperty('--text-secondary', t.textSecondary);
+            root.style.setProperty('--accent-color', t.accent);
+            root.style.setProperty('--accent-soft', t.accentSoft);
+            root.style.setProperty('--border-color', t.border);
+
+            document.body.classList.remove('font-classic', 'font-handwriting', 'font-modern');
+            document.body.classList.add(t.fontClass || 'font-classic');
+
+            document.getElementById('customBgPicker').value = t.bg;
+            document.getElementById('customCardPicker').value = t.card;
+            document.getElementById('customAccentPicker').value = t.accent;
+
+            ['font-classic', 'font-handwriting', 'font-modern'].forEach(cls => {
+                const btn = document.getElementById(`fontBtn-${cls}`);
+                if (btn) {
+                    btn.className = cls === t.fontClass
+                        ? 'py-2.5 px-2 rounded-xl bg-theme-accent text-white text-center transition'
+                        : 'py-2.5 px-2 rounded-xl border text-center transition';
+                }
+            });
+
+            ['card-polaroid', 'card-modern', 'card-scrapbook'].forEach(cls => {
+                const btn = document.getElementById(`cardBtn-${cls}`);
+                if (btn) {
+                    btn.className = cls === t.cardClass
+                        ? 'py-2.5 px-2 rounded-xl bg-theme-accent text-white text-center transition'
+                        : 'py-2.5 px-2 rounded-xl border text-center transition';
+                }
+            });
+        }
+
+        function applyPresetTheme(presetKey) {
+            const preset = PRESET_THEMES[presetKey];
+            if (!preset) return;
+            appData.theme = { ...appData.theme, ...preset };
+            saveAppData();
+            applyThemeToDOM();
+            persistSettings();
+            showToast('Đã đổi giao diện mới!', '🎨');
+        }
+
+        function updateCustomColor(type, hexColor) {
+            if (type === 'bg') {
+                appData.theme.bg = hexColor;
+                const isDark = isColorDark(hexColor);
+                appData.theme.textPrimary = isDark ? '#f8fafc' : '#1e293b';
+                appData.theme.textSecondary = isDark ? '#94a3b8' : '#64748b';
+                appData.theme.border = isDark ? '#334155' : '#e2e8f0';
+            } else if (type === 'card') {
+                appData.theme.card = hexColor;
+            } else if (type === 'accent') {
+                appData.theme.accent = hexColor;
+                appData.theme.accentSoft = hexColor + '22';
+            }
+            saveAppData();
+            applyThemeToDOM();
+            persistSettings();
+        }
+
+        function setFontStyle(fontClass) {
+            appData.theme.fontClass = fontClass;
+            saveAppData();
+            applyThemeToDOM();
+            persistSettings();
+        }
+
+        function setCardStyle(cardClass) {
+            appData.theme.cardClass = cardClass;
+            saveAppData();
+            applyThemeToDOM();
+            persistSettings();
+            renderMemories();
+        }
+
+        /**
+         * =====================================================================
+         * NHẮC SAO LƯU TỰ ĐỘNG
+         * ---------------------------------------------------------------------
+         * Ghi nhớ: lần sao lưu gần nhất + số lần thay đổi kể từ đó.
+         * Hiện thanh nhắc khi: có thay đổi chưa sao lưu VÀ
+         *   (đã quá BACKUP_REMIND_DAYS ngày  HOẶC  đã có từ BACKUP_REMIND_CHANGES thay đổi).
+         * =====================================================================
+         */
+        const BACKUP_META_KEY = 'scrapbook_backup_meta';
+        const BACKUP_REMIND_DAYS = 3;     // bao nhiêu ngày thì nhắc
+        const BACKUP_REMIND_CHANGES = 5;  // bao nhiêu thay đổi thì nhắc
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+        function getBackupMeta() {
+            try {
+                const meta = JSON.parse(localStorage.getItem(BACKUP_META_KEY) || '{}');
+                return {
+                    lastBackupAt: meta.lastBackupAt || 0,       // thời điểm sao lưu gần nhất (mili giây)
+                    changesSinceBackup: meta.changesSinceBackup || 0,
+                    firstChangeAt: meta.firstChangeAt || 0,     // lần thay đổi đầu tiên chưa sao lưu
+                    snoozeUntil: meta.snoozeUntil || 0          // bấm "Để mai" thì tạm ẩn đến lúc này
+                };
+            } catch (e) {
+                return { lastBackupAt: 0, changesSinceBackup: 0, firstChangeAt: 0, snoozeUntil: 0 };
+            }
+        }
+
+        function setBackupMeta(meta) {
+            try {
+                localStorage.setItem(BACKUP_META_KEY, JSON.stringify(meta));
+            } catch (e) { /* bộ nhớ đầy: bỏ qua, không làm hỏng việc lưu chính */ }
+        }
+
+        // Gọi mỗi khi dữ liệu được lưu (trong saveAppData)
+        function recordDataChange() {
+            const meta = getBackupMeta();
+            meta.changesSinceBackup += 1;
+            if (!meta.firstChangeAt) meta.firstChangeAt = Date.now();
+            setBackupMeta(meta);
+            checkBackupReminder();
+        }
+
+        // Gọi sau khi tải file sao lưu (trong exportDataJSON)
+        function markBackupDone() {
+            setBackupMeta({ lastBackupAt: Date.now(), changesSinceBackup: 0, firstChangeAt: 0, snoozeUntil: 0 });
+            checkBackupReminder();
+        }
+
+        function snoozeBackupReminder() {
+            const meta = getBackupMeta();
+            meta.snoozeUntil = Date.now() + ONE_DAY_MS;
+            setBackupMeta(meta);
+            checkBackupReminder();
+            showToast('Mai mình sẽ nhắc lại nhé!', '⏰');
+        }
+
+        function checkBackupReminder() {
+            const bar = document.getElementById('backupReminderBar');
+            if (!bar) return;
+            if (!isEditUnlocked) { bar.classList.add('hidden'); return; } // chỉ nhắc chủ sổ
+            const meta = getBackupMeta();
+            const now = Date.now();
+
+            // Mốc tính ngày: lần sao lưu gần nhất, nếu chưa từng sao lưu thì lấy lần thay đổi đầu tiên
+            const since = meta.lastBackupAt || meta.firstChangeAt || now;
+            const daysPassed = Math.floor((now - since) / ONE_DAY_MS);
+
+            const shouldRemind = meta.changesSinceBackup > 0
+                && now >= meta.snoozeUntil
+                && (daysPassed >= BACKUP_REMIND_DAYS || meta.changesSinceBackup >= BACKUP_REMIND_CHANGES);
+
+            if (shouldRemind) {
+                const when = meta.lastBackupAt ? `Lần sao lưu gần nhất: ${daysPassed} ngày trước` : 'Bạn chưa sao lưu lần nào';
+                document.getElementById('backupReminderText').textContent =
+                    `${when}, đã có ${meta.changesSinceBackup} thay đổi chưa được sao lưu.`;
+                bar.classList.remove('hidden');
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        function describeLastBackup() {
+            const meta = getBackupMeta();
+            if (!meta.lastBackupAt) return '⚠️ Bạn chưa sao lưu lần nào.';
+            const d = new Date(meta.lastBackupAt);
+            const time = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+            const date = formatDateVN(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+            const pending = meta.changesSinceBackup ? ` · ${meta.changesSinceBackup} thay đổi chưa sao lưu` : ' · đã cập nhật đầy đủ ✅';
+            return `🕒 Lần sao lưu gần nhất: ${time} ngày ${date}${pending}`;
+        }
+
+        /**
+         * =====================================================================
+         * SAO LƯU & KHÔI PHỤC DỮ LIỆU JSON
+         * =====================================================================
+         */
+        function openBackupModal() {
+            document.getElementById('lastBackupInfo').textContent = describeLastBackup();
+            document.getElementById('backupModal').classList.replace('hidden', 'flex');
+        }
+
+        function closeBackupModal() {
+            document.getElementById('backupModal').classList.replace('flex', 'hidden');
+        }
+
+        function exportDataJSON() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const dateStr = getTodayLocal();
+            a.href = url;
+            a.download = `So-Ky-Niem-${dateStr}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            markBackupDone(); // ghi nhớ thời điểm sao lưu, ẩn thanh nhắc
+            showToast('Đã tải xuống file sao lưu!', '💾');
+        }
+
+        function importDataJSON(event) {
+            if (!isEditUnlocked) {
+                showToast('Hãy đăng nhập tài khoản chủ sổ trước khi khôi phục.', '🔒');
+                return;
+            }
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = normalizeAppData(JSON.parse(e.target.result));
+                    if (imported) {
+                        closeBackupModal();
+                        uploadImportedData(imported);
+                    } else {
+                        showToast('File không đúng định dạng sổ kỷ niệm.', '❌');
+                    }
+                } catch (err) {
+                    showToast('Lỗi đọc file JSON.', '❌');
+                } finally {
+                    event.target.value = ''; // cho phép chọn lại cùng một file
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        /**
+         * =====================================================================
+         * CÁC HÀM TIỆN ÍCH HỖ TRỢ
+         * =====================================================================
+         */
+        function formatDateVN(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+
+        // Lấy ngày hôm nay theo GIỜ MÁY (toISOString dùng giờ UTC nên trước 7h sáng ở VN sẽ bị lùi 1 ngày)
+        function getTodayLocal(offsetDays = 0) {
+            const d = new Date();
+            d.setDate(d.getDate() + offsetDays);
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${d.getFullYear()}-${mm}-${dd}`;
+        }
+
+        // Thoát ký tự đặc biệt, kể cả dấu nháy, để an toàn khi chèn vào HTML và thuộc tính
+        function escapeHtml(text) {
+            if (text == null || text === '') return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        // Chỉ cho phép ảnh dạng http(s) hoặc ảnh đã nén (data:image)
+        function safeImageSrc(src, fallback) {
+            const s = String(src || '').trim();
+            if (/^https?:\/\//i.test(s) || /^data:image\//i.test(s)) return s;
+            return fallback;
+        }
+
+        function isColorDark(hex) {
+            const c = hex.substring(1);
+            const rgb = parseInt(c, 16);
+            const r = (rgb >> 16) & 0xff;
+            const g = (rgb >> 8) & 0xff;
+            const b = (rgb >> 0) & 0xff;
+            const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            return luma < 110;
+        }
+
+        let toastTimer = null;
+        function showToast(message, icon = '✅') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = message;
+            document.getElementById('toastIcon').textContent = icon;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMemoryModal();
+                closeHeaderEditModal();
+                closeThemeDrawer();
+                closeLightbox();
+                closeBackupModal();
+                closeConfirmDelete();
+                closeUnlockModal();
+                closeBulkModal();
+            }
+        });
+
+        /**
+         * =====================================================================
+         * TRỢ LÝ AI: HƯỚNG DẪN, VIẾT LỜI NHẮN, ĐIỀU KHIỂN TRANG (CLAUDE API)
+         * ---------------------------------------------------------------------
+         * - Có API key  → chế độ thông minh (Claude), hiểu câu nói tự nhiên.
+         * - Không có key / lỗi mạng → chế độ cơ bản (tự xử lý bằng từ khóa).
+         * AI có thể: tạo thẻ, viết lại lời nhắn, tìm/lọc/sắp xếp, mở kỷ niệm,
+         * thống kê, "ngày này năm xưa", đổi giao diện/phông/khung, sao lưu.
+         * AI KHÔNG được xóa kỷ niệm (hành động không thể hoàn tác).
+         * =====================================================================
+         */
+        const AI_SETTINGS_KEY = 'scrapbook_ai_settings_claude';
+        const DEFAULT_AI_MODEL = 'claude-haiku-5-5'; // rẻ & nhanh; muốn viết hay hơn: claude-sonnet-5-5
+        const AI_HISTORY_LIMIT = 10;
+
+        const AI_ACTION_TYPES = [
+            'SEARCH',        // value: từ khóa ('' để xóa tìm kiếm)
+            'FILTER_FRIEND', // value: tên bạn bè hoặc 'ALL'
+            'SORT',          // value: newest | oldest | name
+            'OPEN_MEMORY',   // value: id kỷ niệm
+            'APPLY_THEME',   // value: vintage | pastel | midnight | mint | sunset
+            'SET_FONT',      // value: font-classic | font-handwriting | font-modern
+            'SET_CARD',      // value: card-polaroid | card-modern | card-scrapbook
+            'EXPORT_BACKUP', // không cần value
+            'OPEN_ADD_FORM', // mở form thêm mới, điền từ suggestedMemory
+            'EDIT_MEMORY',   // value: id; mở form sửa, điền từ suggestedMemory
+            'OPEN_BULK_FORM' // value: danh sách tên, mỗi tên một dòng → mở bảng tạo nhiều kỷ niệm
+        ];
+
+        let aiChatHistory = [];
+        let isAIGenerating = false;
+
+        // ---------- Cài đặt API key (lưu riêng trên trình duyệt) ----------
+        function getAISettings() {
+            try {
+                const s = JSON.parse(localStorage.getItem(AI_SETTINGS_KEY) || '{}');
+                return { apiKey: s.apiKey || '', model: s.model || DEFAULT_AI_MODEL };
+            } catch (e) {
+                return { apiKey: '', model: DEFAULT_AI_MODEL };
+            }
+        }
+
+        function updateAIModeLabel() {
+            const { apiKey, model } = getAISettings();
+            document.getElementById('aiModeLabel').textContent = apiKey
+                ? `Chế độ thông minh · ${model}`
+                : 'Chế độ cơ bản · bấm ⚙️ để bật AI';
+        }
+
+        function toggleAISettings() {
+            const panel = document.getElementById('aiSettingsPanel');
+            const { apiKey, model } = getAISettings();
+            document.getElementById('aiApiKeyInput').value = apiKey;
+            document.getElementById('aiModelInput').value = model;
+            panel.classList.toggle('hidden');
+        }
+
+        function saveAISettingsFromForm() {
+            const apiKey = document.getElementById('aiApiKeyInput').value.trim();
+            const model = document.getElementById('aiModelInput').value.trim() || DEFAULT_AI_MODEL;
+            localStorage.setItem(AI_SETTINGS_KEY, JSON.stringify({ apiKey, model }));
+            document.getElementById('aiSettingsPanel').classList.add('hidden');
+            updateAIModeLabel();
+            showToast(apiKey ? 'Đã bật chế độ AI thông minh!' : 'Đã lưu cài đặt.', '🤖');
+        }
+
+        function removeAISettings() {
+            localStorage.removeItem(AI_SETTINGS_KEY);
+            document.getElementById('aiApiKeyInput').value = '';
+            document.getElementById('aiModelInput').value = DEFAULT_AI_MODEL;
+            updateAIModeLabel();
+            showToast('Đã xóa API key khỏi trình duyệt.', '🧹');
+        }
+
+        // ---------- Mở / đóng / xóa khung chat ----------
+        function toggleAIChat() {
+            const win = document.getElementById('aiChatWindow');
+            if (win.classList.contains('hidden')) {
+                win.classList.remove('hidden');
+                win.classList.add('flex');
+                setTimeout(() => document.getElementById('aiChatInput').focus(), 100);
+            } else {
+                win.classList.add('hidden');
+                win.classList.remove('flex');
+            }
+        }
+
+        function showAIWelcome() {
+            const container = document.getElementById('aiMessagesContainer');
+            container.innerHTML = '';
+            appendChatMessage('ai',
+                'Chào bạn! Mình là Trợ lý Kỷ Niệm ✨\n' +
+                'Bạn có thể nhờ mình:\n' +
+                '• Tạo thẻ kỷ niệm từ một câu kể\n' +
+                '• Viết lại lời nhắn cho một kỷ niệm có sẵn\n' +
+                '• Tạo nhiều kỷ niệm cùng lúc: dán danh sách tên\n' +
+                '• Tìm, lọc theo bạn bè, mở một kỷ niệm\n' +
+                '• Thống kê và "ngày này năm xưa"\n' +
+                '• Đổi giao diện, phông chữ, khung thẻ\n' +
+                '• Sao lưu dữ liệu\n' +
+                'Bấm 🎤 để nói thay vì gõ nhé!');
+        }
+
+        function clearAIChat() {
+            aiChatHistory = [];
+            showAIWelcome();
+        }
+
+        function sendQuickPrompt(text) {
+            document.getElementById('aiChatInput').value = text;
+            handleAIChatSubmit(new Event('submit'));
+        }
+
+        // Ô chat: Enter để gửi, Shift+Enter để xuống dòng; ô tự cao lên khi dán nhiều dòng
+        function handleChatKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+                e.preventDefault();
+                handleAIChatSubmit(e);
+            }
+        }
+
+        function autoGrowChatInput(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+        }
+
+        // ---------- Gửi tin nhắn ----------
+        async function handleAIChatSubmit(e) {
+            e.preventDefault();
+            if (isAIGenerating) return;
+
+            const input = document.getElementById('aiChatInput');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            input.value = '';
+            autoGrowChatInput(input);
+            appendChatMessage('user', userText);
+            aiChatHistory.push({ role: 'user', parts: [{ text: userText }] });
+
+            const typingId = appendTypingIndicator();
+            isAIGenerating = true;
+            document.getElementById('aiSendBtn').disabled = true;
+
+            let response;
+            try {
+                const { apiKey } = getAISettings();
+                response = apiKey
+                    ? await callClaudeScrapbookAssistant(apiKey)
+                    : generateLocalFallbackResponse(userText);
+            } catch (error) {
+                console.warn('AI lỗi, chuyển sang chế độ cơ bản:', error);
+                response = generateLocalFallbackResponse(userText);
+                response.reply = `(Không kết nối được AI: ${error.message}. Mình trả lời ở chế độ cơ bản.)\n\n` + response.reply;
+            } finally {
+                removeTypingIndicator(typingId);
+                isAIGenerating = false;
+                document.getElementById('aiSendBtn').disabled = false;
+            }
+
+            appendChatMessage('ai', response.reply, response.suggestedMemory, response.actions);
+            // Luôn lưu câu trả lời vào lịch sử để hai lượt "user" không bị liền nhau
+            aiChatHistory.push({ role: 'model', parts: [{ text: response.reply }] });
+            if (aiChatHistory.length > AI_HISTORY_LIMIT * 2) {
+                aiChatHistory = aiChatHistory.slice(-AI_HISTORY_LIMIT * 2);
+            }
+            runAutoActions(response.actions || []);
+        }
+
+        // ---------- Tóm tắt dữ liệu để AI "nhìn thấy" sổ kỷ niệm ----------
+        function buildDataContextForAI() {
+            const friendCounts = {};
+            appData.memories.forEach(m => {
+                friendCounts[m.friendName] = (friendCounts[m.friendName] || 0) + 1;
+            });
+            const list = [...appData.memories]
+                .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+                .slice(0, 60)
+                .map(m => `- id=${m.id} | bạn: ${m.friendName} | ngày: ${m.date || '?'} | nơi: ${m.location || '?'} | tiêu đề: ${m.title} | lời nhắn: ${(m.story || '').slice(0, 140)}`)
+                .join('\n');
+            return `DỮ LIỆU SỔ HIỆN TẠI:
+- Tổng: ${appData.memories.length} kỷ niệm, ${Object.keys(friendCounts).length} người bạn.
+- Số kỷ niệm theo bạn: ${JSON.stringify(friendCounts)}
+- Đang lọc theo: ${activeFriendFilter}; người đang hỏi ${isEditUnlocked ? 'CÓ quyền sửa' : 'chỉ được xem'}.
+- Danh sách (tối đa 60 kỷ niệm mới nhất):
+${list || '(trống)'}`;
+        }
+
+        async function callClaudeScrapbookAssistant(apiKey) {
+            const { model } = getAISettings();
+            const todayStr = getTodayLocal();
+            const systemPrompt = `Bạn là Trợ Lý Sổ Lưu Giữ Kỷ Niệm thân thiện, ấm áp, trả lời bằng tiếng Việt, ngắn gọn (tối đa khoảng 120 từ, trừ khi được nhờ viết dài).
+Hôm nay là ${todayStr}.
+
+CÁCH DÙNG TRANG (để hướng dẫn):
+- Đăng nhập: chủ sổ bấm "🔒 Đăng nhập" góc trên phải, nhập email + mật khẩu (không bao giờ tiết lộ hay đoán mật khẩu). Người khác chỉ xem.
+- Thêm kỷ niệm: sau khi mở khóa bấm "+ Thêm kỷ niệm"; ảnh có thể tải từ máy (tự nén) hoặc dán link.
+- "🎨 Giao diện": 5 theme (vintage, pastel, midnight, mint, sunset), phông (cổ điển, viết tay, hiện đại), khung thẻ (polaroid, hiện đại, sổ dán).
+- "💾 Sao lưu": tải file .json; khôi phục cần mở khóa.
+
+BẠN CÓ THỂ ĐIỀU KHIỂN TRANG bằng mảng "actions" (chỉ thêm khi người dùng thật sự yêu cầu):
+- SEARCH (value = từ khóa, '' để xóa) | FILTER_FRIEND (value = tên bạn đúng như trong dữ liệu, hoặc 'ALL')
+- SORT (newest|oldest|name) | OPEN_MEMORY (value = id)
+- APPLY_THEME (vintage|pastel|midnight|mint|sunset) | SET_FONT (font-classic|font-handwriting|font-modern) | SET_CARD (card-polaroid|card-modern|card-scrapbook)
+- EXPORT_BACKUP
+- OPEN_ADD_FORM: khi người dùng kể một kỷ niệm mới hoặc nhờ tạo thẻ → điền suggestedMemory đầy đủ.
+- EDIT_MEMORY (value = id): khi nhờ viết lại / sửa lời nhắn, tiêu đề của kỷ niệm CÓ SẴN → suggestedMemory chứa nội dung mới.
+- OPEN_BULK_FORM (value = các tên, MỖI TÊN MỘT DÒNG): khi người dùng muốn tạo kỷ niệm cho NHIỀU người cùng lúc hoặc dán một danh sách tên. Không tự viết lời nhắn trong reply, bảng sẽ làm việc đó.
+Không bao giờ xóa kỷ niệm. Trả lời câu hỏi thống kê, "ngày này năm xưa", tìm kiếm... dựa trên DỮ LIỆU SỔ bên dưới, không bịa.
+
+${buildDataContextForAI()}`;
+
+            // Claude dùng "công cụ" (tool) để trả về dữ liệu có cấu trúc: ta bắt buộc Claude
+            // gọi công cụ "tra_loi", nội dung công cụ chính là JSON { reply, actions, suggestedMemory }
+            const replyTool = {
+                name: 'tra_loi',
+                description: 'Gửi câu trả lời cho người dùng, kèm các hành động điều khiển trang và thẻ kỷ niệm gợi ý (nếu có).',
+                input_schema: {
+                    type: 'object',
+                    properties: {
+                        reply: { type: 'string', description: 'Câu trả lời cho người dùng, tiếng Việt.' },
+                        actions: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    type: { type: 'string', enum: AI_ACTION_TYPES },
+                                    value: { type: 'string' }
+                                },
+                                required: ['type']
+                            }
+                        },
+                        suggestedMemory: {
+                            type: 'object',
+                            properties: {
+                                friendName: { type: 'string', description: 'Tên người bạn / nhóm bạn' },
+                                title: { type: 'string', description: 'Tiêu đề ngắn, cảm xúc, kèm emoji' },
+                                date: { type: 'string', description: 'YYYY-MM-DD; mặc định hôm nay' },
+                                location: { type: 'string' },
+                                story: { type: 'string', description: 'Lời nhắn trau chuốt, ấm áp, chân thành' }
+                            }
+                        }
+                    },
+                    required: ['reply']
+                }
+            };
+
+            // Đổi lịch sử chat sang định dạng của Claude: role "user" / "assistant"
+            const messages = aiChatHistory.slice(-AI_HISTORY_LIMIT).map(h => ({
+                role: h.role === 'model' ? 'assistant' : 'user',
+                content: h.parts.map(p => p.text).join('\n')
+            }));
+            while (messages.length && messages[0].role !== 'user') messages.shift(); // tin đầu tiên phải là của user
+
+            const payload = {
+                model,
+                max_tokens: 1500,
+                system: systemPrompt,
+                messages,
+                tools: [replyTool],
+                tool_choice: { type: 'tool', name: 'tra_loi' }
+            };
+
+            const delays = [1000, 2000, 4000];
+            let lastError = null;
+
+            for (let attempt = 0; attempt <= delays.length; attempt++) {
+                try {
+                    const res = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            'x-api-key': apiKey,
+                            'anthropic-version': '2023-06-01',
+                            // Bắt buộc khi gọi thẳng từ trình duyệt. Chỉ dùng với key của chính bạn,
+                            // vì ai mở F12 trên máy bạn cũng thấy được key.
+                            'anthropic-dangerous-direct-browser-access': 'true'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) {
+                        const err = new Error(describeHttpError(res.status));
+                        // Chỉ thử lại khi quá tải (429, 529) hoặc lỗi máy chủ (5xx); lỗi key/model thì dừng luôn
+                        err.retryable = res.status === 429 || res.status >= 500;
+                        throw err;
+                    }
+                    const result = await res.json();
+                    const toolBlock = (result.content || []).find(b => b.type === 'tool_use');
+                    const parsed = toolBlock?.input;
+                    if (!parsed) throw Object.assign(new Error('AI không trả lời'), { retryable: true });
+                    return {
+                        reply: parsed.reply || 'Mình chưa hiểu ý bạn, bạn nói rõ hơn được không?',
+                        actions: Array.isArray(parsed.actions) ? parsed.actions : [],
+                        suggestedMemory: parsed.suggestedMemory || null
+                    };
+                } catch (err) {
+                    lastError = err;
+                    if (err.retryable === false) break;
+                    if (attempt < delays.length) await new Promise(r => setTimeout(r, delays[attempt]));
+                }
+            }
+            throw lastError;
+        }
+
+        function describeHttpError(status) {
+            if (status === 400) return 'yêu cầu không hợp lệ (kiểm tra tên model)';
+            if (status === 401) return 'API key Claude sai';
+            if (status === 403) return 'API key chưa được cấp quyền';
+            if (status === 404) return 'không tìm thấy model, hãy đổi tên model trong ⚙️';
+            if (status === 402) return 'tài khoản API hết tiền, cần nạp thêm';
+            if (status === 429) return 'gửi quá nhiều, hết hạn mức tạm thời';
+            if (status === 529) return 'máy chủ Claude đang quá tải, thử lại sau';
+            return `lỗi máy chủ (HTTP ${status})`;
+        }
+
+        // ---------- Thực hiện các hành động AI yêu cầu ----------
+        // Hành động "xem" chạy ngay; hành động "sửa giao diện" cần mở khóa;
+        // OPEN_ADD_FORM / EDIT_MEMORY hiện nút để người dùng tự bấm xác nhận.
+        function runAutoActions(actions) {
+            actions.forEach(action => {
+                const value = (action.value || '').trim();
+                switch (action.type) {
+                    case 'SEARCH':
+                        // Tìm kiếm mới thì bỏ lọc bạn bè cũ, tránh kết quả trống do cộng dồn điều kiện
+                        document.getElementById('searchInput').value = value;
+                        setFriendFilter('ALL');
+                        scrollToMemories();
+                        break;
+                    case 'FILTER_FRIEND': {
+                        const match = findFriendName(value);
+                        document.getElementById('searchInput').value = '';
+                        setFriendFilter(match || 'ALL');
+                        scrollToMemories();
+                        break;
+                    }
+                    case 'SORT':
+                        if (['newest', 'oldest', 'name'].includes(value)) {
+                            document.getElementById('sortSelect').value = value;
+                            renderMemories();
+                        }
+                        break;
+                    case 'OPEN_MEMORY':
+                        if (appData.memories.some(m => m.id === value)) openLightbox(value);
+                        break;
+                    case 'APPLY_THEME':
+                        if (PRESET_THEMES[value]) requestUnlockOrAction(() => applyPresetTheme(value));
+                        break;
+                    case 'SET_FONT':
+                        if (['font-classic', 'font-handwriting', 'font-modern'].includes(value)) {
+                            requestUnlockOrAction(() => { setFontStyle(value); showToast('Đã đổi phông chữ!', '🔤'); });
+                        }
+                        break;
+                    case 'SET_CARD':
+                        if (['card-polaroid', 'card-modern', 'card-scrapbook'].includes(value)) {
+                            requestUnlockOrAction(() => { setCardStyle(value); showToast('Đã đổi kiểu khung thẻ!', '🖼️'); });
+                        }
+                        break;
+                    case 'OPEN_BULK_FORM':
+                        openBulkModal(value, '');
+                        break;
+                    case 'EXPORT_BACKUP':
+                        exportDataJSON();
+                        break;
+                    // OPEN_ADD_FORM và EDIT_MEMORY: xử lý bằng nút trong tin nhắn
+                }
+            });
+        }
+
+        function scrollToMemories() {
+            document.getElementById('memoriesGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function findFriendName(name) {
+            if (!name || name === 'ALL') return null;
+            const target = normalizeVN(name);
+            const names = [...new Set(appData.memories.map(m => m.friendName))];
+            return names.find(n => normalizeVN(n) === target)
+                || names.find(n => normalizeVN(n).includes(target) || target.includes(normalizeVN(n)))
+                || null;
+        }
+
+        function applyAISuggestion(encodedJson) {
+            try {
+                const { memoryId, memory } = JSON.parse(decodeURIComponent(encodedJson));
+                if (memoryId && !appData.memories.some(m => m.id === memoryId)) {
+                    showToast('Không tìm thấy kỷ niệm cần sửa.', '⚠️');
+                    return;
+                }
+                openMemoryModal(memoryId || null, memory);
+            } catch (e) {
+                showToast('Không thể áp dụng gợi ý này.', '⚠️');
+            }
+        }
+
+        // ---------- Chế độ cơ bản (không cần API key) ----------
+        // Bỏ dấu tiếng Việt để so khớp từ khóa dễ hơn: "Hôm nay" -> "hom nay"
+        function normalizeVN(text) {
+            return String(text || '')
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .trim();
+        }
+
+        function hasAny(text, words) {
+            return words.some(w => text.includes(w));
+        }
+
+        function generateLocalFallbackResponse(userText) {
+            const t = normalizeVN(userText);
+            const reply = (text, extra = {}) => ({ reply: text, actions: [], suggestedMemory: null, ...extra });
+
+            // 1. Hướng dẫn
+            if (hasAny(t, ['cach dung', 'huong dan', 'mo khoa', 'su dung'])) {
+                return reply('Cách dùng sổ:\n' +
+                    '1. Chủ sổ bấm "🔒 Đăng nhập" (góc trên phải), nhập email và mật khẩu.\n' +
+                    '2. Bấm "+ Thêm kỷ niệm": điền tên bạn, tiêu đề, chọn ảnh, viết lời nhắn.\n' +
+                    '3. Bấm vào thẻ để xem chi tiết, sửa hoặc xóa.\n' +
+                    '4. "🎨 Giao diện" để đổi màu, phông chữ, khung thẻ.\n' +
+                    '5. "💾 Sao lưu" để tải file .json về máy (nên làm thường xuyên!).');
+            }
+
+            // 2. Sao lưu
+            if (hasAny(t, ['sao luu', 'backup', 'xuat du lieu', 'tai file'])) {
+                return reply('Mình đang tải file sao lưu .json về máy cho bạn. Hãy cất file ở nơi an toàn nhé! 💾',
+                    { actions: [{ type: 'EXPORT_BACKUP' }] });
+            }
+
+            // 2b. Tạo nhiều kỷ niệm: có từ khóa, hoặc dán nhiều dòng tên
+            const chatNames = extractNamesFromChat(userText);
+            if (hasAny(t, ['hang loat', 'nhieu ky niem', 'ca lop', 'nhieu nguoi', 'danh sach', 'tao nhieu']) || chatNames.length >= 3) {
+                return reply(chatNames.length
+                    ? `Mình nhận ${chatNames.length} tên và đã mở bảng "Tạo nhiều kỷ niệm". Bạn bấm "✨ Viết lời nhắn" nhé!`
+                    : 'Mình đã mở bảng "Tạo nhiều kỷ niệm". Dán danh sách tên vào, mỗi dòng một người nhé!',
+                    { actions: [{ type: 'OPEN_BULK_FORM', value: chatNames.join('\n') }] });
+            }
+
+            // 3. Thống kê
+            if (hasAny(t, ['thong ke', 'bao nhieu', 'tong ket', 'tong so'])) {
+                return reply(buildLocalStats());
+            }
+
+            // 4. Ngày này năm xưa
+            if (hasAny(t, ['nam xua', 'ngay nay', 'nam truoc', 'cung ngay'])) {
+                return reply(buildOnThisDay());
+            }
+
+            // 5. Đổi giao diện / phông / khung
+            const themeAction = detectThemeAction(t);
+            if (themeAction) return themeAction;
+
+            // 6. Gợi ý lời nhắn
+            if (hasAny(t, ['goi y loi nhan', 'loi nhan hay', 'caption', 'luu but', 'goi y'])) {
+                return reply(pickRandom(SAMPLE_MESSAGES, 3).map((m, i) => `${i + 1}. ${m}`).join('\n\n'));
+            }
+
+            // 7. Tìm kiếm / lọc theo bạn
+            const friend = findFriendInText(t);
+            if (hasAny(t, ['tim', 'loc', 'xem ky niem', 'cho xem', 'hien thi'])) {
+                if (friend) {
+                    return reply(`Đây là các kỷ niệm với ${friend} 👇`, { actions: [{ type: 'FILTER_FRIEND', value: friend }] });
+                }
+                const keyword = userText.replace(/^.*?(tìm|lọc|tim|loc)( kiếm| kiem)?( kỷ niệm| ky niem)?( về| ve| có| co)?\s*/i, '').trim();
+                if (hasAny(t, ['tat ca', 'bo loc', 'xoa tim'])) {
+                    return reply('Đã hiện lại tất cả kỷ niệm.', { actions: [{ type: 'FILTER_FRIEND', value: 'ALL' }, { type: 'SEARCH', value: '' }] });
+                }
+                return reply(`Mình đã tìm "${keyword}" trong sổ cho bạn 🔍`, { actions: [{ type: 'SEARCH', value: keyword }] });
+            }
+
+            // 8. Kể / tạo kỷ niệm
+            if (hasAny(t, ['tao', 'ky niem', 'di choi', 'di an', 'di uong', 'gap', 'cung voi', ' voi '])) {
+                const memory = parseMemoryFromText(userText, friend);
+                return reply(
+                    `Mình đã phác thảo thẻ kỷ niệm:\n• Bạn: ${memory.friendName}\n• Ngày: ${formatDateVN(memory.date)}` +
+                    (memory.location ? `\n• Nơi: ${memory.location}` : '') +
+                    '\nBấm nút bên dưới để điền vào form, bạn có thể sửa lại trước khi lưu ✨',
+                    { actions: [{ type: 'OPEN_ADD_FORM' }], suggestedMemory: memory });
+            }
+
+            // 9. Không hiểu
+            return reply('Mình chưa hiểu ý bạn 😅 Bạn thử: "thống kê", "tìm kỷ niệm với Minh Anh", ' +
+                '"đổi giao diện pastel", "ngày này năm xưa", hoặc kể "hôm nay đi ăn lẩu với Nam ở Quận 3".\n\n' +
+                'Muốn mình hiểu câu nói tự nhiên hơn, hãy bấm ⚙️ để thêm API key Claude.');
+        }
+
+        const SAMPLE_MESSAGES = [
+            'Cảm ơn cậu vì đã đến và ở lại, giữa bao nhiêu người lướt qua đời tớ.',
+            'Mai này dù mỗi đứa một nơi, chỉ cần nhắc tên nhau là thấy lòng ấm lại.',
+            'Có những ngày bình thường, nhưng vì có cậu nên thành kỷ niệm.',
+            'Thanh xuân của tớ không cần rực rỡ, chỉ cần có cậu trong đó là đủ.',
+            'Hẹn cậu ở một phiên bản tốt hơn của cả hai, vẫn cười như ngày hôm nay.',
+            'Bạn thân là người biết hết chuyện xấu hổ của mình mà vẫn chọn ở lại.',
+            'Cảm ơn những buổi chiều không làm gì cả nhưng vui đến lạ.'
+        ];
+
+        function pickRandom(arr, n) {
+            return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+        }
+
+        function findFriendInText(normalizedText) {
+            const names = [...new Set(appData.memories.map(m => m.friendName))]
+                .sort((a, b) => b.length - a.length); // ưu tiên tên dài trước ("Hội Bạn Thân A1" trước "A1")
+            return names.find(n => normalizedText.includes(normalizeVN(n))) || null;
+        }
+
+        function buildLocalStats() {
+            const mems = appData.memories;
+            if (!mems.length) return 'Sổ của bạn chưa có kỷ niệm nào. Hãy thêm kỷ niệm đầu tiên nhé! 📷';
+            const counts = {};
+            mems.forEach(m => { counts[m.friendName] = (counts[m.friendName] || 0) + 1; });
+            const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            const dated = mems.filter(m => m.date).sort((a, b) => a.date.localeCompare(b.date));
+            const years = {};
+            dated.forEach(m => { const y = m.date.slice(0, 4); years[y] = (years[y] || 0) + 1; });
+            const places = {};
+            mems.forEach(m => { if (m.location) places[m.location] = (places[m.location] || 0) + 1; });
+            const topPlace = Object.entries(places).sort((a, b) => b[1] - a[1])[0];
+
+            let text = `📊 Sổ của bạn có ${mems.length} kỷ niệm với ${Object.keys(counts).length} người bạn.\n`;
+            text += `👥 Nhiều kỷ niệm nhất: ${top.map(([n, c]) => `${n} (${c})`).join(', ')}.\n`;
+            if (dated.length) {
+                text += `🕰️ Cũ nhất: "${dated[0].title}" (${formatDateVN(dated[0].date)}).\n`;
+                text += `🆕 Mới nhất: "${dated[dated.length - 1].title}" (${formatDateVN(dated[dated.length - 1].date)}).\n`;
+                text += `📅 Theo năm: ${Object.entries(years).map(([y, c]) => `${y}: ${c}`).join(' · ')}.`;
+            }
+            if (topPlace) text += `\n📍 Nơi đến nhiều nhất: ${topPlace[0]} (${topPlace[1]} lần).`;
+            return text;
+        }
+
+        function buildOnThisDay() {
+            const today = getTodayLocal();
+            const md = today.slice(5);
+            const sameDay = appData.memories.filter(m => m.date && m.date.slice(5) === md && m.date !== today);
+            if (sameDay.length) {
+                return '📅 Ngày này năm xưa:\n' + sameDay
+                    .map(m => `• ${m.date.slice(0, 4)}: "${m.title}" cùng ${m.friendName}`)
+                    .join('\n');
+            }
+            const month = today.slice(5, 7);
+            const sameMonth = appData.memories.filter(m => m.date && m.date.slice(5, 7) === month && m.date.slice(0, 4) !== today.slice(0, 4));
+            if (sameMonth.length) {
+                return 'Hôm nay chưa có kỷ niệm năm xưa, nhưng tháng này các năm trước có:\n' + sameMonth
+                    .map(m => `• ${formatDateVN(m.date)}: "${m.title}" cùng ${m.friendName}`)
+                    .join('\n');
+            }
+            return 'Ngày này các năm trước chưa có kỷ niệm nào. Hôm nay hãy tạo một kỷ niệm mới để sang năm nhìn lại nhé! 🌱';
+        }
+
+        function detectThemeAction(t) {
+            // Lưu ý: so khớp trên chữ đã bỏ dấu, nên tránh từ khóa ngắn dễ trùng
+            // (VD "toi" = "tôi", "hong" nằm trong "không", "doi" = "đồi").
+            const wantsChange = hasAny(t, ['giao dien', 'theme', 'mau sac', 'mau nen', 'doi mau', 'che do',
+                'phong chu', 'font', 'kieu chu', 'khung', 'doi sang', 'doi qua', 'chuyen sang']);
+            if (!wantsChange) return null;
+
+            const themes = [
+                { keys: ['troi dem', 'midnight', 'dark', 'che do toi', 'giao dien toi', 'nen toi', 'mau toi', 'ban dem'], value: 'midnight', name: 'Trời Đêm' },
+                { keys: ['pastel', 'mau hong', 'hong phan'], value: 'pastel', name: 'Pastel Mộng Mơ' },
+                { keys: ['mint', 'xanh la', 'mau xanh'], value: 'mint', name: 'Xanh Mint' },
+                { keys: ['hoang hon', 'sunset', 'mau cam'], value: 'sunset', name: 'Hoàng Hôn' },
+                { keys: ['vintage', 'mau kem', 'mac dinh', 'giao dien sang', 'che do sang'], value: 'vintage', name: 'Sổ Tay Vintage' }
+            ];
+            const fonts = [
+                { keys: ['viet tay'], value: 'font-handwriting', name: 'Viết tay' },
+                { keys: ['co dien'], value: 'font-classic', name: 'Cổ điển' },
+                { keys: ['hien dai'], value: 'font-modern', name: 'Hiện đại' }
+            ];
+            const cards = [
+                { keys: ['polaroid'], value: 'card-polaroid', name: 'Polaroid' },
+                { keys: ['so dan', 'scrapbook'], value: 'card-scrapbook', name: 'Sổ dán' },
+                { keys: ['hien dai'], value: 'card-modern', name: 'Hiện đại' }
+            ];
+
+            const lockNote = isEditUnlocked ? '' : '\n(Cần đăng nhập chủ sổ trước.)';
+
+            if (hasAny(t, ['phong chu', 'font', 'kieu chu'])) {
+                const f = fonts.find(x => hasAny(t, x.keys));
+                if (f) return { reply: `Đã đổi phông chữ sang "${f.name}" 🔤${lockNote}`, actions: [{ type: 'SET_FONT', value: f.value }], suggestedMemory: null };
+            }
+            if (hasAny(t, ['khung', 'card', 'kieu the'])) {
+                const c = cards.find(x => hasAny(t, x.keys));
+                if (c) return { reply: `Đã đổi khung thẻ sang "${c.name}" 🖼️${lockNote}`, actions: [{ type: 'SET_CARD', value: c.value }], suggestedMemory: null };
+            }
+            const th = themes.find(x => hasAny(t, x.keys));
+            if (th) return { reply: `Đã đổi sang giao diện "${th.name}" 🎨${lockNote}`, actions: [{ type: 'APPLY_THEME', value: th.value }], suggestedMemory: null };
+            return null;
+        }
+
+        // Tách thông tin kỷ niệm từ câu kể: "đi ăn lẩu với Nam ở Quận 3 hôm qua"
+        function parseMemoryFromText(text, knownFriend) {
+            // Tên bạn: sau chữ "với"/"cùng" cho đến "ở", "tại", "hôm", dấu phẩy...
+            // Không dùng \b vì \b của JavaScript không hiểu chữ có dấu như "ở"
+            let friendName = knownFriend;
+            if (!friendName) {
+                const m = text.match(/(?:với|cùng)\s+(.+?)(?=\s+(?:ở|tại|hôm|vào|lúc|ngày|đi|rồi)(?:\s|$)|[,.!?]|$)/i);
+                friendName = m ? m[1].trim() : 'Hội Bạn Thân';
+            }
+
+            const loc = text.match(/(?:\s|^)(?:ở|tại)\s+(.+?)(?=\s+(?:hôm|vào|lúc|ngày|với|cùng)(?:\s|$)|[,.!?]|$)/i);
+            const location = loc ? loc[1].trim() : '';
+
+            const t = normalizeVN(text);
+            let date = getTodayLocal();
+            if (t.includes('hom kia')) date = getTodayLocal(-2);
+            else if (t.includes('hom qua')) date = getTodayLocal(-1);
+            const dm = text.match(/(\d{1,2})[\/\-](\d{1,2})(?:[\/\-](\d{4}))?/);
+            if (dm) {
+                const y = dm[3] || getTodayLocal().slice(0, 4);
+                date = `${y}-${dm[2].padStart(2, '0')}-${dm[1].padStart(2, '0')}`;
+            }
+
+            // Tiêu đề: lấy hoạt động chính, bỏ phần "tạo giúp tôi 1 kỷ niệm"
+            let activity = text
+                .replace(/^.*?(?:kỷ niệm|ky niem)\s*(?:mẫu)?\s*/i, '')
+                .replace(/^(?:hôm nay|hôm qua|hôm kia)\s*(?:tôi|mình|tớ)?\s*/i, '')
+                .replace(/\s*(?:với|cùng|ở|tại|hôm nay|hôm qua|hôm kia)(?:\s|$).*$/i, '')
+                .trim();
+            if (!activity || activity.length > 50) activity = 'Khoảnh khắc đáng nhớ';
+            const capitalized = activity.charAt(0).toUpperCase() + activity.slice(1);
+            const title = capitalized + ' ✨';
+
+            const story = `${capitalized} cùng ${friendName}${location ? ' ở ' + location : ''}. ` +
+                `Cảm ơn ${friendName} vì một ngày thật vui!\n${pickRandom(SAMPLE_MESSAGES, 1)[0]}`;
+
+            return { friendName, title, date, location, story };
+        }
+
+        // ---------- Giọng nói (Chrome / Edge) ----------
+        let speechRecognizer = null;
+        let isListening = false;
+
+        function initVoiceInput() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) return; // trình duyệt không hỗ trợ → ẩn nút mic
+            speechRecognizer = new SR();
+            speechRecognizer.lang = 'vi-VN';
+            speechRecognizer.interimResults = true;
+            speechRecognizer.onresult = (e) => {
+                const transcript = [...e.results].map(r => r[0].transcript).join('');
+                document.getElementById('aiChatInput').value = transcript;
+            };
+            speechRecognizer.onend = () => {
+                isListening = false;
+                document.getElementById('aiMicBtn').classList.remove('mic-listening');
+            };
+            speechRecognizer.onerror = (e) => {
+                if (e.error === 'not-allowed') showToast('Bạn cần cho phép dùng micro.', '🎤');
+            };
+            document.getElementById('aiMicBtn').classList.remove('hidden');
+        }
+
+        function toggleVoiceInput() {
+            if (!speechRecognizer) return;
+            if (isListening) {
+                speechRecognizer.stop();
+            } else {
+                document.getElementById('aiChatInput').value = '';
+                speechRecognizer.start();
+                isListening = true;
+                document.getElementById('aiMicBtn').classList.add('mic-listening');
+            }
+        }
+
+        // ---------- Hiển thị tin nhắn ----------
+        function appendChatMessage(sender, text, suggestedMemory = null, actions = []) {
+            const container = document.getElementById('aiMessagesContainer');
+            const wrapper = document.createElement('div');
+
+            if (sender === 'user') {
+                wrapper.className = 'flex justify-end';
+                wrapper.innerHTML = `<div class="px-3.5 py-2.5 rounded-2xl rounded-tr-none bg-theme-accent text-white max-w-[82%] leading-relaxed shadow-sm whitespace-pre-line">${escapeHtml(text)}</div>`;
+            } else {
+                wrapper.className = 'flex gap-2.5 items-start';
+                let actionBtnHtml = '';
+
+                const editAction = (actions || []).find(a => a.type === 'EDIT_MEMORY');
+                const hasMemory = suggestedMemory && (suggestedMemory.title || suggestedMemory.story);
+                if (hasMemory) {
+                    const memoryId = editAction ? editAction.value : null;
+                    const encoded = encodeURIComponent(JSON.stringify({ memoryId, memory: suggestedMemory }));
+                    const label = memoryId ? '✏️ Áp dụng vào kỷ niệm này' : '✨ Điền vào form kỷ niệm';
+                    actionBtnHtml = `<button data-payload="${escapeHtml(encoded)}" onclick="applyAISuggestion(this.dataset.payload)" class="mt-2.5 w-full py-2 px-3 rounded-xl bg-theme-accent text-white font-semibold text-xs shadow hover:brightness-110 transition">${label}</button>`;
+                }
+
+                wrapper.innerHTML = `<div class="w-7 h-7 rounded-full bg-theme-accent-soft text-theme-accent flex items-center justify-center shrink-0 text-xs font-bold">AI</div>` +
+                    `<div class="p-3 rounded-2xl rounded-tl-none bg-theme-accent-soft text-theme-primary max-w-[85%] leading-relaxed"><div class="whitespace-pre-line">${escapeHtml(text)}</div>${actionBtnHtml}</div>`;
+            }
+
+            container.appendChild(wrapper);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function appendTypingIndicator() {
+            const container = document.getElementById('aiMessagesContainer');
+            const id = 'typing_' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = 'flex gap-2.5 items-start';
+            div.innerHTML = `
+                <div class="w-7 h-7 rounded-full bg-theme-accent-soft text-theme-accent flex items-center justify-center shrink-0 text-xs font-bold">AI</div>
+                <div class="px-3.5 py-2.5 rounded-2xl rounded-tl-none bg-theme-accent-soft text-theme-accent flex items-center gap-1">
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                    <span class="typing-dot"></span>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        /**
+         * =====================================================================
+         * MÁY CHỦ FIREBASE (LƯU DỮ LIỆU CHUNG) + ĐĂNG NHẬP CHỦ SỔ
+         * ---------------------------------------------------------------------
+         * Cấu hình nằm ở file firebase-config.js (bạn dán thông tin dự án vào đó).
+         * - Chưa có cấu hình  → "chế độ trên máy": dữ liệu chỉ lưu trên trình duyệt này.
+         * - Có cấu hình       → dữ liệu lưu trên Firestore, ai mở app cũng thấy,
+         *                       chỉ email trong OWNER_EMAILS (đã đăng nhập) mới sửa được.
+         *   Firestore:  book/settings   → tiêu đề, ảnh bìa, logo, giao diện
+         *               memories/<id>   → từng kỷ niệm (ảnh đã nén nằm luôn trong kỷ niệm)
+         * =====================================================================
+         */
+        const FIREBASE_VERSION = '10.12.2';
+        const MAX_DOC_CHARS = 900000; // Firestore giới hạn ~1 MB mỗi tài liệu
+
+        let fb = null;              // các hàm Firebase sau khi tải xong
+        let cloudMode = 'loading';  // 'loading' | 'local' | 'cloud'
+        let currentUser = null;
+        let memoriesLoaded = false;
+        let cloudError = '';
+        let settingsWriteChain = Promise.resolve();
+
+        function getOwnerEmails() {
+            return (window.OWNER_EMAILS || []).map(e => String(e).trim().toLowerCase()).filter(Boolean);
+        }
+
+        function isConfigFilled(cfg) {
+            return cfg && typeof cfg.apiKey === 'string' && cfg.apiKey.length > 10 && !/DAN_|DÁN|xxx/i.test(cfg.apiKey);
+        }
+
+        async function initFirebase() {
+            const cfg = window.FIREBASE_CONFIG;
+            if (!isConfigFilled(cfg)) {
+                cloudMode = 'local';
+                isEditUnlocked = true; // trên máy của chính bạn: sửa thoải mái
+                memoriesLoaded = true;
+                updateLockUI();
+                renderMemories();
+                checkBackupReminder();
+                console.info('Chưa có firebase-config.js → chạy chế độ trên máy.');
+                return;
+            }
+
+            try {
+                const base = `https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}`;
+                const [appMod, fsMod, authMod] = await Promise.all([
+                    import(`${base}/firebase-app.js`),
+                    import(`${base}/firebase-firestore.js`),
+                    import(`${base}/firebase-auth.js`)
+                ]);
+                const app = appMod.initializeApp(cfg);
+                let db;
+                try {
+                    // Lưu bản sao trên máy để mở app khi mất mạng vẫn xem được
+                    db = fsMod.initializeFirestore(app, { localCache: fsMod.persistentLocalCache() });
+                } catch (e) {
+                    db = fsMod.getFirestore(app);
+                }
+                const auth = authMod.getAuth(app);
+                fb = { db, auth, ...fsMod, ...authMod };
+            } catch (err) {
+                console.error('Không tải được Firebase:', err);
+                cloudMode = 'local';
+                isEditUnlocked = false;
+                cloudError = 'Không kết nối được máy chủ. Kiểm tra mạng rồi mở lại app.';
+                memoriesLoaded = true;
+                updateLockUI();
+                renderMemories();
+                return;
+            }
+
+            cloudMode = 'cloud';
+            updateLockUI();
+
+            // Theo dõi đăng nhập: chỉ email chủ sổ mới được sửa
+            fb.onAuthStateChanged(fb.auth, user => {
+                currentUser = user;
+                const email = (user && user.email || '').toLowerCase();
+                isEditUnlocked = !!user && getOwnerEmails().includes(email);
+                updateLockUI();
+                renderMemories();
+                checkBackupReminder();
+                if (user && !isEditUnlocked) {
+                    showToast('Tài khoản này không phải chủ sổ nên chỉ xem được.', '👀');
+                }
+                if (isEditUnlocked && typeof pendingUnlockCallback === 'function') {
+                    const cb = pendingUnlockCallback;
+                    pendingUnlockCallback = null;
+                    cb();
+                }
+            });
+
+            const loadingTimer = setTimeout(() => {
+                if (!memoriesLoaded) {
+                    cloudError = 'Chưa tải được dữ liệu, kiểm tra kết nối mạng nhé.';
+                    renderMemories();
+                }
+            }, 10000);
+
+            fb.onSnapshot(fb.doc(fb.db, 'book', 'settings'), snap => {
+                if (!snap.exists()) return;
+                const d = snap.data() || {};
+                appData.header = { ...DEFAULT_DATA.header, ...(d.header || {}) };
+                appData.theme = { ...DEFAULT_DATA.theme, ...(d.theme || {}) };
+                cacheAppDataLocally();
+                applyThemeToDOM();
+                renderHeader();
+                renderMemories();
+            }, err => console.warn('Lỗi đọc cài đặt:', err));
+
+            fb.onSnapshot(fb.collection(fb.db, 'memories'), snap => {
+                appData.memories = snap.docs
+                    .map((d, i) => normalizeMemory({ ...d.data(), id: d.id }, i))
+                    .filter(Boolean);
+                memoriesLoaded = true;
+                cloudError = '';
+                clearTimeout(loadingTimer);
+                cacheAppDataLocally();
+                renderFriendFilters();
+                renderMemories();
+            }, err => {
+                clearTimeout(loadingTimer);
+                memoriesLoaded = true;
+                cloudError = err && err.code === 'permission-denied'
+                    ? 'Máy chủ chưa cho phép đọc dữ liệu. Kiểm tra lại phần Rules của Firestore.'
+                    : 'Không tải được dữ liệu của sổ.';
+                renderMemories();
+            });
+        }
+
+        function describeCloudError(err) {
+            const code = err && err.code;
+            if (code === 'permission-denied') return 'Máy chủ từ chối: bạn chưa đăng nhập đúng tài khoản chủ sổ.';
+            if (code === 'resource-exhausted') return 'Đã hết hạn mức miễn phí hôm nay, thử lại vào ngày mai.';
+            if (code === 'invalid-argument') return 'Dữ liệu quá lớn (ảnh quá nặng?).';
+            if (code === 'unavailable') return 'Đang mất mạng, thay đổi sẽ tự gửi khi có mạng lại.';
+            return 'Chưa lưu được lên máy chủ, thử lại sau.';
+        }
+
+        function persistSettings() {
+            if (cloudMode !== 'cloud' || !isEditUnlocked) return Promise.resolve();
+            const body = JSON.parse(JSON.stringify({ header: appData.header, theme: appData.theme }));
+            if (JSON.stringify(body).length > MAX_DOC_CHARS) {
+                showToast('Ảnh bìa / ảnh đại diện quá nặng, hãy chọn ảnh nhỏ hơn.', '⚠️');
+                return Promise.resolve();
+            }
+            settingsWriteChain = settingsWriteChain
+                .then(() => fb.setDoc(fb.doc(fb.db, 'book', 'settings'), body))
+                .catch(err => showToast(describeCloudError(err), '⚠️'));
+            return settingsWriteChain;
+        }
+
+        async function persistMemory(mem) {
+            if (cloudMode !== 'cloud' || !isEditUnlocked) return cloudMode === 'local';
+            const { id, ...body } = mem;
+            if (JSON.stringify(body).length > MAX_DOC_CHARS) {
+                showToast(`Ảnh của "${mem.title}" quá nặng nên chưa lưu được.`, '⚠️');
+                return false;
+            }
+            try {
+                await fb.setDoc(fb.doc(fb.db, 'memories', id), body);
+                return true;
+            } catch (err) {
+                showToast(describeCloudError(err), '⚠️');
+                return false;
+            }
+        }
+
+        async function removeMemoryFromCloud(id) {
+            if (cloudMode !== 'cloud' || !isEditUnlocked) return;
+            try {
+                await fb.deleteDoc(fb.doc(fb.db, 'memories', id));
+            } catch (err) {
+                showToast(describeCloudError(err), '⚠️');
+            }
+        }
+
+        async function uploadImportedData(imported) {
+            if (cloudMode !== 'cloud') {
+                // Chế độ trên máy: thay toàn bộ dữ liệu như bản cũ
+                appData = imported;
+                activeFriendFilter = 'ALL';
+                saveAppData();
+                applyThemeToDOM();
+                renderHeader();
+                renderFriendFilters();
+                renderMemories();
+                showToast('Đã khôi phục dữ liệu thành công!', '🎉');
+                return;
+            }
+            if (!isEditUnlocked) {
+                showToast('Hãy đăng nhập tài khoản chủ sổ trước.', '🔒');
+                return;
+            }
+            const total = imported.memories.length;
+            let done = 0, failed = 0;
+            showToast(`Đang đưa ${total} kỷ niệm lên máy chủ…`, '⏳');
+            appData.header = { ...imported.header };
+            appData.theme = { ...imported.theme };
+            applyThemeToDOM();
+            renderHeader();
+            await persistSettings();
+            for (const mem of imported.memories) {
+                (await persistMemory(mem)) ? done++ : failed++;
+                if ((done + failed) % 3 === 0) showToast(`Đang đưa lên ${done + failed}/${total}…`, '⏳');
+            }
+            activeFriendFilter = 'ALL';
+            showToast(failed ? `Xong ${done}/${total} kỷ niệm (${failed} lỗi).` : `Đã đưa ${done} kỷ niệm lên máy chủ!`, failed ? '⚠️' : '🎉');
+        }
+
+        function updateEmptyStateText() {
+            const title = document.getElementById('emptyStateTitle');
+            const text = document.getElementById('emptyStateText');
+            const btn = document.getElementById('emptyStateBtn');
+            const hasAny = appData.memories.length > 0;
+            btn.classList.add('hidden');
+            if (cloudError) {
+                title.textContent = 'Chưa mở được sổ';
+                text.textContent = cloudError;
+            } else if (!memoriesLoaded && !hasAny) {
+                title.textContent = 'Đang mở sổ kỷ niệm…';
+                text.textContent = 'Chờ một chút nhé.';
+            } else if (!hasAny) {
+                title.textContent = 'Sổ còn trống';
+                text.textContent = isEditUnlocked
+                    ? 'Bấm "Thêm kỷ niệm", hoặc vào 💾 Sao lưu → nhập file .json cũ.'
+                    : 'Chủ sổ chưa thêm kỷ niệm nào. Quay lại sau nhé!';
+                if (isEditUnlocked) btn.classList.remove('hidden');
+            } else {
+                title.textContent = 'Không tìm thấy kỷ niệm nào';
+                text.textContent = 'Thử từ khóa khác hoặc chọn "Tất cả".';
+            }
+        }
+
+        // Đăng ký service worker: giúp app mở nhanh và cài được lên màn hình chính
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+                navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW lỗi:', err));
+            }
+        }
+
+        /**
+         * =====================================================================
+         * TẠO NHIỀU KỶ NIỆM CÙNG LÚC
+         * ---------------------------------------------------------------------
+         * 1. Dán danh sách tên (mỗi dòng / dấu phẩy) + dịp chung (tùy chọn).
+         * 2. AI viết tiêu đề + lời nhắn riêng cho từng người (không có AI thì dùng mẫu).
+         * 3. Xem lại, sửa, bỏ chọn người không cần → "Lưu tất cả".
+         * =====================================================================
+         */
+        const BULK_MAX_NAMES = 60;
+        const BULK_AI_BATCH = 15; // mỗi lần hỏi AI tối đa 15 người cho nhanh và ổn định
+        let bulkDrafts = [];
+
+        // Tách tên: bỏ số thứ tự "1.", "2)", gạch đầu dòng, khoảng trắng thừa, tên trùng
+        function parseNameList(text) {
+            const seen = new Set();
+            return String(text || '')
+                .split(/[\n,;，、]+/)
+                .map(n => n.replace(/^\s*(?:\d+\s*[.)\-:]|[-–•*+])\s*/, '').replace(/\s+/g, ' ').trim())
+                .filter(n => n && n.length <= 60)
+                .filter(n => {
+                    const key = normalizeVN(n);
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                })
+                .slice(0, BULK_MAX_NAMES);
+        }
+
+        function updateBulkNameCount() {
+            const names = parseNameList(document.getElementById('bulkNamesInput').value);
+            document.getElementById('bulkNameCount').textContent = names.length
+                ? `Đã nhận ${names.length} người: ${names.slice(0, 6).join(', ')}${names.length > 6 ? '…' : ''}`
+                : 'Chưa có tên nào.';
+        }
+
+        function openBulkModal(prefillNames = '', prefillOccasion = '') {
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(() => openBulkModal(prefillNames, prefillOccasion));
+                return;
+            }
+            if (prefillNames) document.getElementById('bulkNamesInput').value = prefillNames;
+            if (prefillOccasion) document.getElementById('bulkOccasionInput').value = prefillOccasion;
+            if (!document.getElementById('bulkDateInput').value) document.getElementById('bulkDateInput').value = getTodayLocal();
+            updateBulkNameCount();
+            showBulkStep('input');
+            document.getElementById('bulkModal').classList.replace('hidden', 'flex');
+            setTimeout(() => document.getElementById('bulkNamesInput').focus(), 100);
+        }
+
+        function closeBulkModal() {
+            document.getElementById('bulkModal').classList.replace('flex', 'hidden');
+        }
+
+        function showBulkStep(step) {
+            document.getElementById('bulkStepInput').classList.toggle('hidden', step !== 'input');
+            document.getElementById('bulkStepReview').classList.toggle('hidden', step !== 'review');
+        }
+
+        // Mẫu dự phòng khi không có AI: xoay vòng để mỗi người một kiểu
+        const BULK_TITLE_TEMPLATES = [
+            'Cảm ơn {name} vì đã ở đây 💛', '{name} – một mảnh thanh xuân ✨', 'Gửi {name} thân thương 🌸',
+            'Những ngày có {name} 📸', '{name} và tụi mình 🎒', 'Nhớ mãi {name} 🌈'
+        ];
+        const BULK_STORY_TEMPLATES = [
+            'Cảm ơn {name} vì những tiếng cười, những lần giúp đỡ và cả những lúc lặng lẽ ở bên. {occ}Mai này dù mỗi đứa một nơi, tớ vẫn sẽ nhớ cậu.',
+            '{name} ơi, nhìn lại mới thấy những ngày bình thường có cậu lại thành kỷ niệm đẹp nhất. {occ}Chúc cậu luôn vững vàng và rực rỡ nhé!',
+            'Có {name} trong lớp là một điều may mắn. {occ}Cảm ơn cậu vì đã cùng tụi mình lớn lên, ồn ào và trưởng thành.',
+            'Gửi {name}: thanh xuân của tớ có cậu là đủ đầy. {occ}Hẹn gặp lại ở một phiên bản tốt hơn của cả hai!',
+            '{name} – người làm những giờ ra chơi vui hơn hẳn. {occ}Mong cậu luôn giữ nụ cười ấy trên mọi chặng đường.',
+            'Nhắn {name}: cảm ơn vì đã là một phần của tụi mình. {occ}Dù sau này bận rộn, nhớ về nhà A12 nhé!'
+        ];
+
+        function buildTemplateDrafts(names, occasion) {
+            const occ = occasion ? `Nhớ mãi ${occasion.charAt(0).toLowerCase() + occasion.slice(1)}. ` : '';
+            return names.map((name, i) => ({
+                friendName: name,
+                title: BULK_TITLE_TEMPLATES[i % BULK_TITLE_TEMPLATES.length].replace('{name}', name),
+                story: BULK_STORY_TEMPLATES[(i * 5 + 3) % BULK_STORY_TEMPLATES.length].replace('{name}', name).replace('{occ}', occ)
+            }));
+        }
+
+        function buildBulkPrompt(names, occasion, location) {
+            return `Bạn viết lời nhắn cho sổ lưu bút / sổ kỷ niệm lớp học bằng tiếng Việt.
+Dịp: ${occasion || 'kỷ niệm thanh xuân cùng lớp'}${location ? `; địa điểm: ${location}` : ''}.
+Với MỖI người trong danh sách, viết:
+- "title": tiêu đề ngắn (dưới 8 chữ), cảm xúc, có 1 emoji, có tên người đó.
+- "story": lời nhắn 2-3 câu, ấm áp, tự nhiên, xưng "tớ" gọi "cậu", KHÔNG bịa chi tiết cụ thể về người đó, mỗi người một kiểu khác nhau.
+Danh sách (giữ đúng thứ tự và đúng chính tả tên):
+${names.map((n, i) => `${i + 1}. ${n}`).join('\n')}
+Chỉ trả về MỘT mảng JSON, không thêm chữ nào khác:
+[{"friendName": "...", "title": "...", "story": "..."}]`;
+        }
+
+        async function generateBulkDrafts() {
+            const names = parseNameList(document.getElementById('bulkNamesInput').value);
+            if (!names.length) {
+                showToast('Bạn dán ít nhất 1 tên nhé.', '✍️');
+                return;
+            }
+            const occasion = document.getElementById('bulkOccasionInput').value.trim();
+            const location = document.getElementById('bulkLocationInput').value.trim();
+            const btn = document.getElementById('bulkGenerateBtn');
+            btn.disabled = true;
+
+            let drafts = [];
+            let usedAI = false;
+            let aiProblem = '';
+            if (bulkCanUseAI()) {
+                try {
+                    for (let i = 0; i < names.length; i += BULK_AI_BATCH) {
+                        const batch = names.slice(i, i + BULK_AI_BATCH);
+                        btn.textContent = `AI đang viết ${Math.min(i + batch.length, names.length)}/${names.length}…`;
+                        const result = await bulkCallAI(buildBulkPrompt(batch, occasion, location));
+                        const list = Array.isArray(result) ? result : [];
+                        // Ghép theo thứ tự, luôn giữ đúng tên người dùng dán vào
+                        batch.forEach((name, k) => {
+                            const r = list[k] || {};
+                            drafts.push({
+                                friendName: name,
+                                title: String(r.title || '').trim(),
+                                story: String(r.story || '').trim()
+                            });
+                        });
+                    }
+                    usedAI = true;
+                } catch (err) {
+                    console.warn('AI tạo hàng loạt lỗi:', err);
+                    aiProblem = 'AI chưa viết được, mình dùng lời nhắn mẫu.';
+                    drafts = [];
+                }
+            }
+            // Người nào AI bỏ sót thì điền bằng mẫu
+            const templates = buildTemplateDrafts(names, occasion);
+            if (!drafts.length) drafts = templates;
+            drafts = drafts.map((d, i) => ({
+                friendName: d.friendName,
+                title: d.title || templates[i].title,
+                story: d.story || templates[i].story,
+                selected: true
+            }));
+
+            btn.disabled = false;
+            btn.textContent = '✨ Viết lời nhắn';
+            bulkDrafts = drafts;
+            document.getElementById('bulkReviewNote').textContent =
+                (usedAI ? `AI đã viết cho ${drafts.length} người. ` : `${aiProblem || 'Đang dùng lời nhắn mẫu (chưa bật AI).'} `) +
+                'Bạn sửa trực tiếp nếu muốn, bỏ tick người không cần, rồi bấm "Lưu tất cả".';
+            renderBulkDrafts();
+            showBulkStep('review');
+        }
+
+        function renderBulkDrafts() {
+            const list = document.getElementById('bulkDraftList');
+            list.innerHTML = bulkDrafts.map((d, i) => `
+                <div class="p-3 rounded-2xl border ${d.selected ? '' : 'opacity-50'}" style="border-color: var(--border-color);">
+                    <div class="flex items-center gap-2 mb-2">
+                        <input type="checkbox" ${d.selected ? 'checked' : ''} onchange="toggleBulkDraft(${i}, this.checked)" class="w-4 h-4 accent-current">
+                        <span class="px-2.5 py-0.5 rounded-full bg-theme-accent-soft text-theme-accent text-xs font-bold">👤 ${escapeHtml(d.friendName)}</span>
+                    </div>
+                    <input type="text" value="${escapeHtml(d.title)}" oninput="bulkDrafts[${i}].title = this.value"
+                           class="w-full px-3 py-2 mb-2 rounded-xl border bg-transparent text-sm font-semibold focus:outline-none" style="border-color: var(--border-color);">
+                    <textarea rows="2" oninput="bulkDrafts[${i}].story = this.value"
+                              class="w-full px-3 py-2 rounded-xl border bg-transparent text-sm focus:outline-none" style="border-color: var(--border-color);">${escapeHtml(d.story)}</textarea>
+                </div>`).join('');
+            updateBulkSaveButton();
+        }
+
+        function toggleBulkDraft(index, checked) {
+            bulkDrafts[index].selected = checked;
+            renderBulkDrafts();
+        }
+
+        function updateBulkSaveButton() {
+            const n = bulkDrafts.filter(d => d.selected).length;
+            const btn = document.getElementById('bulkSaveBtn');
+            btn.textContent = `Lưu tất cả (${n})`;
+            btn.disabled = n === 0;
+        }
+
+        async function saveBulkDrafts() {
+            if (!isEditUnlocked) {
+                requestUnlockOrAction(saveBulkDrafts);
+                return;
+            }
+            const chosen = bulkDrafts.filter(d => d.selected && d.friendName && (d.title.trim() || d.story.trim()));
+            if (!chosen.length) return;
+            const btn = document.getElementById('bulkSaveBtn');
+            btn.disabled = true;
+
+            const date = document.getElementById('bulkDateInput').value || getTodayLocal();
+            const location = document.getElementById('bulkLocationInput').value.trim();
+            const stamp = Date.now();
+            const newMemories = chosen.map((d, i) => ({
+                id: `mem_${stamp}_${i}`,
+                friendName: d.friendName.trim(),
+                title: d.title.trim() || 'Kỷ niệm ✨',
+                date,
+                location,
+                image: '',
+                story: d.story.trim()
+            }));
+
+            appData.memories.unshift(...newMemories);
+            saveAppData();
+            renderFriendFilters();
+            renderMemories();
+
+            // Gửi lên máy chủ lần lượt từng kỷ niệm (bản trên máy thì bỏ qua bước này)
+            let failed = 0;
+            for (let i = 0; i < newMemories.length; i++) {
+                btn.textContent = `Đang lưu ${i + 1}/${newMemories.length}…`;
+                const ok = await persistMemory(newMemories[i]);
+                if (ok === false) failed++;
+            }
+
+            btn.disabled = false;
+            closeBulkModal();
+            document.getElementById('bulkNamesInput').value = '';
+            bulkDrafts = [];
+            showToast(failed
+                ? `Đã tạo ${newMemories.length - failed}/${newMemories.length} kỷ niệm (${failed} lỗi).`
+                : `Đã tạo ${newMemories.length} kỷ niệm! Bấm vào từng thẻ để thêm ảnh.`, failed ? '⚠️' : '🎉');
+        }
+
+        // AI cho tính năng tạo nhiều kỷ niệm: dùng API key Claude (nếu chủ sổ đã nhập trong ⚙️)
+        function bulkCanUseAI() {
+            return !!getAISettings().apiKey;
+        }
+
+        async function bulkCallAI(prompt) {
+            const { apiKey, model } = getAISettings();
+            const res = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'x-api-key': apiKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({ model, max_tokens: 4000, messages: [{ role: 'user', content: prompt }] })
+            });
+            if (!res.ok) throw new Error(describeHttpError(res.status));
+            const data = await res.json();
+            const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
+            const start = text.indexOf('['), end = text.lastIndexOf(']');
+            if (start < 0 || end < start) throw new Error('AI trả lời sai định dạng');
+            return JSON.parse(text.slice(start, end + 1));
+        }
+
+        // Lấy danh sách tên từ tin nhắn chat: "tạo kỷ niệm cho An, Bình, Chi" hoặc dán nhiều dòng
+        function extractNamesFromChat(text) {
+            const raw = String(text || '');
+            const commandWords = ['tao', 'ky niem', 'giup', 'cho ca', 'danh sach', 'hang loat', 'lop', 'nhieu'];
+            let part = raw;
+            if (raw.includes('\n')) {
+                const lines = raw.split('\n');
+                if (hasAny(normalizeVN(lines[0]), commandWords) || /[:：]\s*$/.test(lines[0])) lines.shift();
+                part = lines.join('\n');
+            } else if (/[:：]/.test(raw)) {
+                part = raw.slice(raw.search(/[:：]/) + 1);
+            } else {
+                const m = raw.match(/\s(?:cho|với|tặng|gửi)\s+(.+)$/i);
+                if (!m) return [];
+                part = m[1];
+            }
+            return parseNameList(part).filter(n => n.split(' ').length <= 5 && !hasAny(normalizeVN(n), ['ky niem', 'giup toi', 'hom nay', 'loi nhan']));
+        }
+
+        // Khởi chạy ứng dụng khi tải trang
+        window.onload = () => {
+            updateLockUI();
+            applyThemeToDOM();
+            renderHeader();
+            renderFriendFilters();
+            renderMemories();
+            showAIWelcome();
+            updateAIModeLabel();
+            initVoiceInput();
+            checkBackupReminder();
+            initFirebase();
+            registerServiceWorker();
+        };
+    </script>
+</body>
+</html>

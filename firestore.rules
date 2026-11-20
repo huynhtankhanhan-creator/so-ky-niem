@@ -1,0 +1,32 @@
+rules_version = '2';
+
+// =====================================================================
+// QUY TẮC BẢO MẬT FIRESTORE — dán vào Firebase Console → Firestore → Rules
+// - Ai cũng ĐỌC được (để bạn bè mở app là xem được sổ)
+// - Chỉ email chủ sổ (đã đăng nhập) mới GHI / XÓA được
+// Nhớ đổi email bên dưới thành email của bạn (chữ thường).
+// =====================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email.lower() in ['huynhtankhanhan@gmail.com'];
+    }
+
+    match /book/{docId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    match /memories/{memoryId} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+
+    // Mọi chỗ khác: cấm hết
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
