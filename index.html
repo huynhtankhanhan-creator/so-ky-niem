@@ -7,8 +7,8 @@
     <!-- PWA: cài lên màn hình chính, mở như app -->
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#ff8a6b">
-    <link rel="icon" type="image/png" href="icons/icon-192.png">
-    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="A12">
@@ -161,7 +161,7 @@
     <nav class="sticky top-0 z-30 backdrop-blur-md border-b transition-colors duration-300" style="background-color: color-mix(in srgb, var(--bg-color) 85%, transparent); border-color: var(--border-color);">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
             <div class="flex items-center gap-2.5">
-                <img src="icons/icon-192.png" alt="Logo A12" class="w-9 h-9 rounded-xl shadow-sm">
+                <img src="icon-192.png" alt="Logo A12" class="w-9 h-9 rounded-xl shadow-sm">
                 <span class="font-bold text-base sm:text-lg tracking-tight hidden sm:inline">Sổ Kỷ Niệm A12</span>
             </div>
 
@@ -218,7 +218,7 @@
         <div class="relative rounded-3xl overflow-hidden bg-theme-card border shadow-lg transition-all duration-300">
             <div class="relative h-48 sm:h-64 md:h-72 w-full bg-slate-200 overflow-hidden group">
                 <img id="pageCoverImg" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80" 
-                     onerror="this.onerror=null;this.src='icons/placeholder.svg'"
+                     onerror="this.onerror=null;this.src='placeholder.svg'"
                      alt="Ảnh bìa kỷ niệm" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                 
@@ -232,7 +232,7 @@
             <div class="relative px-6 pb-6 pt-12 sm:pt-4 sm:pl-40 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div class="absolute -top-12 left-6 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 overflow-hidden shadow-xl bg-white" style="border-color: var(--card-color);">
                     <img id="pageAvatarImg" src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80"
-                         onerror="this.onerror=null;this.src='icons/icon-192.png'"
+                         onerror="this.onerror=null;this.src='icon-192.png'"
                          alt="Avatar nhóm" class="w-full h-full object-cover">
                 </div>
 
@@ -1419,8 +1419,8 @@
                              class="bg-theme-card border ${cardStyleClass} flex flex-col justify-between cursor-pointer group animate-fade-up">
                         <div>
                             <div class="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-slate-100 mb-3.5">
-                                <img src="${escapeHtml(safeImageSrc(mem.image, 'icons/placeholder.svg'))}" loading="lazy"
-                                     onerror="this.onerror=null;this.src='icons/placeholder.svg'"
+                                <img src="${escapeHtml(safeImageSrc(mem.image, 'placeholder.svg'))}" loading="lazy"
+                                     onerror="this.onerror=null;this.src='placeholder.svg'"
                                      alt="${escapeHtml(mem.title)}" 
                                      class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                                 
@@ -1471,7 +1471,7 @@
             const mem = appData.memories.find(m => m.id === memoryId);
             if (!mem) return;
 
-            document.getElementById('lightboxImg').src = safeImageSrc(mem.image, 'icons/placeholder.svg');
+            document.getElementById('lightboxImg').src = safeImageSrc(mem.image, 'placeholder.svg');
             document.getElementById('lightboxFriendBadge').textContent = `👤 ${mem.friendName}`;
             document.getElementById('lightboxTitle').textContent = mem.title;
             document.getElementById('lightboxDate').textContent = mem.date ? `📅 ${formatDateVN(mem.date)}` : '';
@@ -3055,4 +3055,4 @@ Chỉ trả về MỘT mảng JSON, không thêm chữ nào khác:
         };
     </script>
 </body>
-</html>
+    </html>
