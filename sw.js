@@ -9,10 +9,10 @@ const APP_SHELL = [
   './index.html',
   './firebase-config.js',
   './manifest.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/placeholder.svg'
+  './icon-192.png',
+  './icon-512.png',
+  './apple-touch-icon.png',
+  './placeholder.svg'
 ];
 // Thư viện bên ngoài được phép lưu lại để mở khi mất mạng
 const CACHEABLE_HOSTS = ['cdn.tailwindcss.com', 'fonts.googleapis.com', 'fonts.gstatic.com', 'www.gstatic.com'];
